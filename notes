@@ -1,0 +1,16 @@
+[ html form input data rules ]
+number | text | textarea | select | radio | checkbox | date | year
+number		- 50
+text 		- 200
+textarea	- 1000
+password 	- 220
+email 		- 110
+range		- 80
+radio  		- 90
+checkbox	- 60
+date 		- date
+month 		- month
+
+
+[ Task ]
+- create mysql schema

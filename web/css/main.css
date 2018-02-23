@@ -1,0 +1,117 @@
+.site_logo{
+	margin:0 auto;
+	text-align: center;
+	padding: 0px 0px 10px 0px;
+}
+.status{
+	color: #fff;
+	font-weight: bold;
+  	cursor: default;
+    border-radius: 4px 4px 0 0;
+    border:1px solid #E2E2E2;
+    border-bottom: transparent;
+    margin: 0 -10px;
+}
+.nav > li > a:hover,
+.nav > li > a:focus {
+  text-decoration: none;
+  background-color: transparent;
+}
+.nav-tabs > li > a:hover {
+ 	border-color: #eee #eee #ddd;
+}
+
+.status > a,
+.status > a:active,
+.status > a:hover,
+.status > a:focus{
+	color: #fff;
+	font-weight: bold;
+}
+.status > a:hover{
+	background-color: transparent;
+}
+.status-new > a,
+.status-new > a:active,
+.status-new > a:hover,
+.status-new > a:focus{
+	color: #4B4B4B;
+	font-weight: bold;
+}
+.status-new{
+	background-color: #FFF;
+}
+.status-inp{
+	background-color: #413AFF;
+}
+.status-nof{
+	background-color: #F57272;
+}
+.status-done{
+	background-color: #2DAE21;
+}
+.status_body{
+	text-align: center;
+}
+
+
+.nav-tabs > li, .nav-pills > li {
+    float:none;
+    display:inline-block;
+    *display:inline; /* ie7 fix */
+     zoom:1; /* hasLayout ie7 trigger */
+}
+
+.nav-tabs, .nav-pills {
+    text-align:center;
+}
+
+.space-up{
+	margin-bottom: 10px;
+}
+
+.btn-file {
+    position: relative;
+    overflow: hidden;
+}
+.btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;
+    background: white;
+    cursor: inherit;
+    display: block;
+}
+
+.input-btn{
+	text-align: center;
+}
+.input-btn > input,.input-btn > button{
+	padding: 10px 40px !important;
+}
+.breadcrumb > li + li:before {
+			content: " | " !important;
+}
+.breadcrumb > li > a {
+	font-size: 15px !important;
+}
+
+h1,h2,h3{
+	padding-bottom:10px;
+}
+
+label{
+	padding-bottom: 5px;
+}
+
+.login_input input,.login_input select, .login_input select{
+	padding:50px;
+	font-size:60px;
+}
