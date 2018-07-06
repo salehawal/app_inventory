@@ -773,9 +773,7 @@ function get_items()
 function find_item()
 {
 	global $pdata;
-	print_r($_POST);
-	print_r($_GET);
-	if(isset($_POST['iid']) && strlen($_POST['iid']) == 10)
+	if(isset($_POST['iid']) && strlen($_POST['iid']) >= 10)
 	{
 		$pfx = strtolower(substr($_POST['iid'],0,2));
 		$tinfo = get_table_pfx($pfx);
@@ -1103,6 +1101,7 @@ function get_table_pfx($tinfo)
 function table_pfxs()
 {
 	$pfxs = array('vh'=>'fict_vehicles',
+	'fa'=>'fict_aircondition',
 	'ap'=>'fict_approach',
 	'bc'=>'fict_battery_charger',
 	'fc'=>'fict_cameras_rl',

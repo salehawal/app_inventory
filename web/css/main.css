@@ -141,13 +141,6 @@ label{
 	font-size:60px;
 }
 
-.list-btn .btn{
-    width: 100%;
-    text-align: center;
-    padding: 60px;
-    font-size: 60px;
-}
-
 .row{
         margin: 0px 0px;
     }
@@ -180,7 +173,7 @@ label{
 
 .login_form .box-title h3
 {
-    font-size: 90px !important;
+    font-size: 90px;
 }
 
 .login_form .btn{
@@ -241,7 +234,7 @@ label{
 }
 .data-table h3
 {
-    font-size: 50px !important;
+    font-size: 50px;
 }
 .data-table input, .data-table select
 {
@@ -323,6 +316,9 @@ label{
     font-size: 40px !important;
     padding: 60px 30px !important;
 }
+.form-menu-btn button{
+    text-align: center;
+}
 
 .list-btn{
     width: 100%;
@@ -330,14 +326,15 @@ label{
     /*padding-top: 60px;*/
 }
 
-.list-btn button
-{
-    /*padding: 80px 100px;*/
-    /* margin: 40px 10px; */
-    /*font-size: 50px;*/
+.list-btn .btn{
+    width: 100%;
+    text-align: center;
+    padding: 60px;
+    font-size: 60px;
     font-weight: bold;
     text-align: center;
 }
+
 .empty
 {
     font-size: 50px;
@@ -359,28 +356,62 @@ label{
 }
 
 @media screen and (max-width: 800px) {
-   .mitem img, .logo img{
+    .mitem img, .logo img{
         width: 60%;
         height: 60%;
-   }
-   .input_search{
+    }
+
+    .input_search{
         padding:10px;
         font-size:40px;
     }
+    
     .input_button{
         padding:40px;
         font-size:40px;
     }
+    
     .mspace{
         padding-bottom:40px;
     }
-    .btn{
-        font-size: 35px !important;
-        padding: 50px !important;
+    
+    h1{ 
+        font-size: 40px !important;
     }
-    h1{ font-size: 40px !important; }
-        table {
+    
+    table {
         table-layout: fixed;
         word-wrap: break-word;
+    }
+    
+    h3{
+        font-size: 24px !important;
+    }
+    
+    .list-btn .btn{
+        padding: 34px;
+        font-size: 35px;
+        font-weight: bold;
+        text-align: center;
+    }
+    .data-table td, .data-table th, .data-table li{
+        font-size: 12px;
+    }
+    .icon{
+        vertical-align: middle !important;
+    }
+    .icon img{
+        width: 20px;
+        margin: auto;
+    }
+    .form-menu-btn
+    {
+        font-size: 20px !important;
+        padding: 30px 45px !important;
+        text-align: center;
+        margin: auto;
+    }
+    .btn-nav-form button{
+        width: 100%;
     }
 }

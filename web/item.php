@@ -55,7 +55,7 @@ if(isset($_POST['action'])) { print_r($_POST); exit; }
 			</div>
 			<?php } ?>
 			<?php include('inc/form_btns.php'); ?>
-			<br><br><br><br><br><br>
+			<br>
 			<div class="row add-from">
 				<div class="col-md-1"></div>
 				<div class="col-md-10">
