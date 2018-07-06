@@ -18,12 +18,10 @@ $sections = get_main_tables();
 	<link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
 	<link rel="stylesheet" type="text/css" href="css/ionicons.min.css">
 	<link rel="stylesheet" type="text/css" href="css/main.css">
-	<link rel="stylesheet" type="text/css" href="css/main_mobile.css">
 	<!-- <link rel="stylesheet" type="text/css" href="css/admin-te.min.css"> -->
 	<link href="css/_all-skins.min.css" rel="stylesheet" type="text/css" />
   	<link href="css/blue.css" rel="stylesheet" type="text/css" />
   	<link href="css/datepicker3.css" rel="stylesheet" type="text/css" />
-
 	<script src="js/jquery-1.11.3.min.js"></script>
 	<script src="css/bootstrap-fileinput-master/js/fileinput.min.js"></script>
 	<script src="js/respond.min.js"></script>

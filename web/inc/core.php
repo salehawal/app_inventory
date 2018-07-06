@@ -85,15 +85,17 @@ function db_bind_all($stid, $params)
 function get_sql_select_fields($params)
 {
 	$q = '';
+	$i = 1;
+	$len = count($params);
 	foreach ($params as $param => $val)
 	{
 		// check fields
 		$val[0] = check_select_type($val[0]);
 		// assign value
 		$q .= ' '.strtolower($val[0]);
-		if(end($params) !== $val)
+		if($i < $len)
     		$q .= ',';
-	}
+	$i++;}
 	return $q;
 }
 
@@ -118,7 +120,7 @@ function get_sql_update($params)
 	foreach ($params as $key => $val)
 	{
 		// check if key is date
-		$val[0] = check_insert_type($val[0]);
+		//$val[0] = check_insert_type($val[0]);
 		$sql .= $key.' = '.$val[0];
 		if($i != $count) $sql .= ', ';
 		$i++;
@@ -132,7 +134,7 @@ function get_sql_insert($params)
 	foreach ($params as $par => $val)
 	{
 		// check if key is date
-		$val[0] = check_insert_type($val[0]);
+		//$val[0] = check_insert_type($val[0]);
 		// add values
 		if(isset($fields)) $fields .= ','.$par; else $fields = "(".$par;
 		if(isset($values)) $values .= ','.$val[0]; else $values = "(".$val[0];
@@ -180,7 +182,9 @@ function check_select_type($key)
 {
 	// check key is date
 	if(strpos(strtolower($key),'date') !== false)
-		return "to_char(".$key.", 'yyyy-mm-dd') as ".$key;
+		//return "to_char(".$key.", 'yyyy-mm-dd') as ".$key; // Oracle
+		//return "DATE_FORMAT(".$key.", '%Y-%m-%d') as ".$key;
+		return $key;
 	else
 		return $key;
 }

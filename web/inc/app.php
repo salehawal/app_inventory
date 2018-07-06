@@ -630,6 +630,7 @@ function add_item()
 		$params[$pdata['page']['tidfield']] = array(':'.$pdata['page']['tidfield'],$pdata['page']['iid']);
 		$q 									= get_sql_insert($params);
 		$q 									= "insert into ".$pdata['page']['tname']." ".$q;
+		print_r($params); echo $q;
 	}
 	elseif(isset($_POST['action']) && $_POST['action'] == 'update')
 	{
@@ -640,13 +641,15 @@ function add_item()
 	}
 	else
 		exit;
-	//$st->debugdumpparams();
 	$rs = add_multiple_images();
 	if($rs)
 	{
 		// prepare & bind
 		$st = $pdata['conn']->prepare($q);
 		$st = db_bind_all($st,$params);
+		
+		print_r($_POST);
+		$st->debugdumpparams();
 		// execute
 		$st->execute() or die(print_r($st->errorinfo()));
 	} 
@@ -864,11 +867,13 @@ function gen_view_data()
 		foreach ($idata  as $key => $val)
 		{
 			// check status
-			if($val['status'] == 'n')
+			/*if($val['status'] == 'n')
 				$code = '<tr class="danger">';
 			else
 				$code = '<tr>';
+			*/
 			// add view link
+			$code = '<tr>';
 			$code .= '<td class="icon"><a href="item.php?section='.$pdata["page"]["section"].'&iid='.$val[$pdata["page"]["tidfield"]].'"><img src="img/view.png"></a></td>';
 			foreach ($val as $k => $v) {
 				foreach ($hdata as $hx => $hv) {
@@ -1066,7 +1071,6 @@ function get_images($iid)
 	$images = array();
 	// sql
 	$q = "select * from fict_images where  fim_ref_code = '".$iid."'";
-	//echo $q; exit;
 	// prepare & bind
 	$st = $pdata['conn']->prepare($q);
 	$st->execute();
@@ -1515,6 +1519,11 @@ function page_static_config($table)
 			$pdata['page']['pfx'] 				= 'ts';
 			$pdata['page']['tidfield'] 			= 'ftsc_code';
 		break;
+
+		case 'fict_aircondition':
+			$pdata['page']['order']				= 25;
+			$pdata['page']['pfx'] 				= 'fai';
+			$pdata['page']['tidfield'] 			= 'fai_code';
 	}
 }
 

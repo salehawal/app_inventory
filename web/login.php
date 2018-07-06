@@ -17,7 +17,6 @@ $locations = get_locations();
 	<link rel="stylesheet" type="text/css" href="css/reset.css">
 	<link rel="stylesheet" type="text/css" href="css/bootstrap-fileinput-master/css/fileinput.min.css">
 	<link rel="stylesheet" type="text/css" href="css/main.css">
-	<link rel="stylesheet" type="text/css" href="css/main_mobile.css">
 	<link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
 	<link rel="stylesheet" type="text/css" href="css/ionicons.min.css">
 	<!-- <link rel="stylesheet" type="text/css" href="css/admin-te.min.css"> -->
@@ -32,11 +31,7 @@ $locations = get_locations();
 <div class="content-wrapper">
 		<!-- main content -->
 		<section class="content">
-			<div class="row">
-				<div class="col-md-12 logo">
-					<img src="img/mlogo.png" width="380" height="380" />
-				</div>
-			</div>
+			<?php $pdata['showmenu'] = false; include('inc/header.php'); ?>
 			<div class="row">
 				<div class="col-md-12 logo">
 					<h1 class="h1">inventory collection</h1>
@@ -78,7 +73,7 @@ $locations = get_locations();
 							</div>
 							<div class="form-group" id="lbox">
 								<label for="locationid">location</label>
-								<select class="form-control" id="location_input_select" name="locationid" onchange="switchlocationinput();">
+								<select class="form-control" id="location_input_select" name="locationid" onchange="switch_location_input();">
 									<?php if(!empty($locations)) { foreach ($locations as $location) { ?>
 										<option value="<?php echo $location['flo_code']; ?>"><?php echo $location['flo_address']; ?></option>
 									<?php }} else {  ?>
@@ -88,7 +83,7 @@ $locations = get_locations();
 									<?php } ?>
 									<option value="other">other ... ( to enter )</option>
 								</select>
-								<input id="location_input_text" name="new_location" type="text" class="form-control" value="" placeholder="enter location"  onkeyup="switchlocationinput();">
+								<input id="location_input_text" name="new_location" type="text" class="form-control" value="" placeholder="enter location"  onkeyup="switch_location_input();">
 							</div>
 						</div><!-- /.box-body -->
 

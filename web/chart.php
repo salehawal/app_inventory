@@ -17,7 +17,6 @@ user_login_check();
   <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
   <link rel="stylesheet" type="text/css" href="css/ionicons.min.css">
   <link rel="stylesheet" type="text/css" href="css/main.css">
-  <link rel="stylesheet" type="text/css" href="css/main_mobile.css">
   <link rel="stylesheet" type="text/css" href="css/admin-te.min.css">
   <link href="css/_all-skins.min.css" rel="stylesheet" type="text/css" />
   <link href="css/blue.css" rel="stylesheet" type="text/css" />

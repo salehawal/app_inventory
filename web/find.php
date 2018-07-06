@@ -2,7 +2,7 @@
 require_once('inc/core.php');
 require_once('inc/app.php');
 sys_init();
-user_login_check();
+//user_login_check();
 $pdata['showmenu'] = false;
 if(isset($_POST['iid']))
 	find_item();
@@ -15,55 +15,32 @@ if(isset($_POST['iid']))
 	<script language="javascript"> console.log(0);//alert(check_device());</script>
 	<link rel="stylesheet" type="text/css" href="css/bootstrap-3.3.5-dist/css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="css/reset.css">
-	<link rel="stylesheet" type="text/css" href="css/bootstrap-fileinput-master/css/fileinput.min.css">
-	<link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
-	<link rel="stylesheet" type="text/css" href="css/ionicons.min.css">
 	<link rel="stylesheet" type="text/css" href="css/main.css">
-	<link rel="stylesheet" type="text/css" href="css/main_mobile.css">
-	<link href="css/_all-skins.min.css" rel="stylesheet" type="text/css" />
-  	<link href="css/blue.css" rel="stylesheet" type="text/css" />
-  	<link href="css/datepicker3.css" rel="stylesheet" type="text/css" />
-
 	<script src="js/jquery-1.11.3.min.js"></script>
-	<script src="css/bootstrap-fileinput-master/js/fileinput.min.js"></script>
-	<script src="js/respond.min.js"></script>
-	<script src="js/html5shiv.min.js"></script>
 </head>
 <body>
 	<form class="" action="" method="post">
 	<div class="content-wrapper">
 		<?php include('inc/header.php'); ?>
 		<!-- Main content -->
-		<div style="padding-bottom:140px;"></div>
+		<div class="mspace"></div>
 		<section class="content">
 			<div class="row">
 				<div class="col-xs-12">
-					<input type="text" name="iid" id="iid" class="form-control" placeholder="Enter Item Code..." style="padding:120px; font-size:80px;" onkeyup="javascript:force_upper_case(this);">
+					<input type="text" name="iid" id="iid" class="form-control input_search" placeholder="Enter Item Code..." onkeyup="javascript:force_upper_case(this);">
 				</div>
 			</div>
 			<br><br>
 			<div class="row">
 				<div class="col-xs-12" style="text-align: center">
-					<input type="submit" value="SEARCH" class="btn btn-danger" style="padding:120px; font-size:90px;">
+					<input type="submit" value="FIND" class="btn btn-danger input_button">
 				</div>
 			</div>
 		</section>
 	</div>
 </form>
-<script src="js/jquery-ui.min.js" type="text/javascript"></script>
 <script src="js/bootstrap.min.js"></script>
-<script src="js/bootstrap-datepicker.js" type="text/javascript"></script>
-<script src="js/jquery.dataTables.min.js" type="text/javascript"></script>
-<script src="js/dataTables.bootstrap.min.js" type="text/javascript"></script>
-<script src="js/jquery.slimscroll.min.js" type="text/javascript"></script>
-<script src="js/jQuery-2.1.4.min.js"></script>
-<script src="js/bootstrap.min.js" type="text/javascript"></script>
-<script src="js/jquery.dataTables.min.js" type="text/javascript"></script>
-<script src="js/dataTables.bootstrap.min.js" type="text/javascript"></script>
-<script src="js/jquery.slimscroll.min.js" type="text/javascript"></script>
-<script src='js/fastclick.min.js'></script>
 <script src="js/app.min.js" type="text/javascript"></script>
-<script src="js/demo.js" type="text/javascript"></script>
 <script type="text/javascript">
 $(function () {
 	$("#example1").dataTable();

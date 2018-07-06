@@ -12,7 +12,6 @@ print_r($_POST);
 	<link rel="stylesheet" type="text/css" href="../css/bootstrap-fileinput-master/css/fileinput.min.css">
 	<link rel="stylesheet" type="text/css" href="../css/ionicons.min.css">
 	<link rel="stylesheet" type="text/css" href="../css/main.css">
-	<link rel="stylesheet" type="text/css" href="../css/main_mobile.css">
 	<link href="../css/_all-skins.min.css" rel="stylesheet" type="text/css" />
   	<link href="../css/blue.css" rel="stylesheet" type="text/css" />
 	<link href="../css/bootstrap-switch-master/dist/css/bootstrap3/bootstrap-switch.min.css" rel="stylesheet">

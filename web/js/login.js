@@ -1,12 +1,12 @@
 // Check Location Input
-function switchLocationInput()
+function switch_location_input()
 {
 	if( ($('#location_input_select').val() == "other" && $('#location_input_select').is(':visible')) || ($('#location_input_text').val() == "" && $('#location_input_text').is(':visible')))
-		switchLogin();
+		switch_login();
 }
 
 // Switch Login Location Input
-function switchLogin()
+function switch_login()
 {
 	if($('#location_input_select').is(':visible'))
 	{

@@ -8,6 +8,7 @@ if(isset($_GET['section']))
 user_login_check();
 if(!empty($_POST['locationid']))
 	add_item();
+if(isset($_POST['action'])) { print_r($_POST); exit; }
 ?>
 <!doctype html>
 <html>
@@ -22,7 +23,6 @@ if(!empty($_POST['locationid']))
 	<link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
 	<link rel="stylesheet" type="text/css" href="css/ionicons.min.css">
 	<link rel="stylesheet" type="text/css" href="css/main.css">
-	<link rel="stylesheet" type="text/css" href="css/main_mobile.css">
 	<!-- <link rel="stylesheet" type="text/css" href="css/admin-te.min.css"> -->
 	<link href="css/_all-skins.min.css" rel="stylesheet" type="text/css" />
   	<link href="css/blue.css" rel="stylesheet" type="text/css" />
@@ -87,12 +87,12 @@ if(!empty($_POST['locationid']))
 			</div>
 		</section>
 		<section class="contect">
-			<div class="row" style="text-align: center">
-			<?php if(isset($pdata['page']['item']) && gettype($pdata['page']['item']['images']) == 'array') foreach ($pdata['page']['item']['images'] as $key => $value) { ?>
+			<div class="row" style="text-align: center; width: 83%; margin: auto">
 				<div class="col-xs-12">
-					<img src="inc/image.php?imgid=<?php echo $value['fim_code']; ?>" width="300">
+					<?php if(isset($pdata['page']['item']) && gettype($pdata['page']['item']['images']) == 'array') foreach ($pdata['page']['item']['images'] as $key => $value) { ?>						
+							<span style="width:300px; height: 200px; overflow: hidden; float:left; display: inline-block; padding: 2px; margin: 4px;"><a href="inc/image.php?imgid=<?php echo $value['fim_code']; ?>" target="_blank"><img src="inc/image.php?imgid=<?php echo $value['fim_code']; ?>"></a></span>
+					<?php } ?>
 				</div>
-			<?php } ?>
 			</div>
 		</section>
 	</div>
