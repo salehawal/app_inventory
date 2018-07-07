@@ -1,5 +1,5 @@
 <?php
-require_once('inc/core.php');
+require_once('lib/core.php');
 $conn = db_connect();
 //$tables = gettablefields('fict_vehicles');
 //print_r($tables);

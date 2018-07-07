@@ -1,6 +1,6 @@
 <?php
-require_once('inc/core.php');
-require_once('inc/app.php');
+require_once('lib/core.php');
+require_once('lib/app.php');
 sys_init();// init page session
 if(isset($_POST['username'])) user_login();
 // locations
@@ -31,7 +31,7 @@ $locations = get_locations();
 <div class="content-wrapper">
 		<!-- main content -->
 		<section class="content">
-			<?php $pdata['showmenu'] = false; include('inc/header.php'); ?>
+			<?php $pdata['showmenu'] = false; include('lib/header.php'); ?>
 			<div class="row">
 				<div class="col-md-12 logo">
 					<h1 class="h1">inventory collection</h1>

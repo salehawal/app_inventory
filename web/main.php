@@ -1,6 +1,6 @@
 <?php
-require_once('inc/core.php');
-require_once('inc/app.php');
+require_once('lib/core.php');
+require_once('lib/app.php');
 sys_init();
 user_login_check();
 // sections
@@ -29,7 +29,7 @@ $sections = get_main_tables();
 </head>
 <body>
 <div class="content">
-	<?php $pdata['showmenu'] = false; include('inc/header.php'); ?>
+	<?php $pdata['showmenu'] = false; include('lib/header.php'); ?>
 	<?php foreach ($sections as $id => $sec) { ?>
 	<div class="row btn-nav-menu">
 		<div class="col-xs-12 list-btn">

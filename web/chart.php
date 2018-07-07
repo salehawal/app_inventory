@@ -1,6 +1,6 @@
 <?php
-require_once('inc/core.php');
-require_once('inc/app.php');
+require_once('lib/core.php');
+require_once('lib/app.php');
 sys_init(); // init page session
 $conn = db_connect();
 user_login_check();
@@ -29,7 +29,7 @@ user_login_check();
 </head>
 <body>
   <div class="content-wrapper">
-      <?php $showmenu = false; include('inc/header.php'); ?>
+      <?php $showmenu = false; include('lib/header.php'); ?>
       <!-- main content -->
       <section class="content">
         <div class="row">

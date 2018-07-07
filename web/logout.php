@@ -1,4 +1,4 @@
 <?php
-require_once('inc/app.php');
+require_once('lib/app.php');
 user_logout();
 ?>

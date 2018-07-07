@@ -1,6 +1,6 @@
 <?php
-require_once('inc/core.php');
-require_once('inc/app.php');
+require_once('lib/core.php');
+require_once('lib/app.php');
 sys_init();
 // get page data
 if(isset($_GET['section']))
@@ -44,7 +44,7 @@ if(isset($_POST['action'])) { print_r($_POST); exit; }
 	<?php } ?>
 	<input name="locationid" type="hidden" value="<?php echo $pdata['loc']['flo_code']; ?>" />
 	<div class="content-wrapper">
-		<?php include('inc/header.php'); ?>
+		<?php include('lib/header.php'); ?>
 		<!-- main content -->
 		<section class="content">
 			<?php if(isset($_GET['iid'])) { ?>
@@ -54,7 +54,7 @@ if(isset($_POST['action'])) { print_r($_POST); exit; }
 				</div>
 			</div>
 			<?php } ?>
-			<?php include('inc/form_btns.php'); ?>
+			<?php include('lib/form_btns.php'); ?>
 			<br>
 			<div class="row add-from">
 				<div class="col-md-1"></div>
@@ -90,7 +90,7 @@ if(isset($_POST['action'])) { print_r($_POST); exit; }
 			<div class="row" style="text-align: center; width: 83%; margin: auto">
 				<div class="col-xs-12">
 					<?php if(isset($pdata['page']['item']) && gettype($pdata['page']['item']['images']) == 'array') foreach ($pdata['page']['item']['images'] as $key => $value) { ?>						
-							<span style="width:300px; height: 200px; overflow: hidden; float:left; display: inline-block; padding: 2px; margin: 4px;"><a href="inc/image.php?imgid=<?php echo $value['fim_code']; ?>" target="_blank"><img src="inc/image.php?imgid=<?php echo $value['fim_code']; ?>"></a></span>
+							<span style="width:300px; height: 200px; overflow: hidden; float:left; display: inline-block; padding: 2px; margin: 4px;"><a href="lib/image.php?imgid=<?php echo $value['fim_code']; ?>" target="_blank"><img src="lib/image.php?imgid=<?php echo $value['fim_code']; ?>"></a></span>
 					<?php } ?>
 				</div>
 			</div>

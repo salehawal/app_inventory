@@ -1,6 +1,6 @@
 <?php
-require_once('inc/core.php');
-require_once('inc/app.php');
+require_once('lib/core.php');
+require_once('lib/app.php');
 sys_init();
 $conn = db_connect();
 user_login_check();

@@ -1,6 +1,6 @@
 <?php
-require_once('inc/core.php');
-require_once('inc/app.php');
+require_once('lib/core.php');
+require_once('lib/app.php');
 sys_init();
 // get page data
 if(isset($_GET['section']))
@@ -34,7 +34,7 @@ get_items();
 </head>
 <body>
 <div class="content-wrapper">
-	<?php include('inc/header.php'); ?>
+	<?php include('lib/header.php'); ?>
 	<!-- main content -->
 	<section class="content">
 		<div class="row">

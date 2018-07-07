@@ -1,6 +1,6 @@
 <?php
-require_once('inc/core.php');
-require_once('inc/app.php');
+require_once('lib/core.php');
+require_once('lib/app.php');
 sys_init();
 //user_login_check();
 $pdata['showmenu'] = false;
@@ -21,7 +21,7 @@ if(isset($_POST['iid']))
 <body>
 	<form class="" action="" method="post">
 	<div class="content-wrapper">
-		<?php include('inc/header.php'); ?>
+		<?php include('lib/header.php'); ?>
 		<!-- Main content -->
 		<div class="mspace"></div>
 		<section class="content">
