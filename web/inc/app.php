@@ -630,7 +630,6 @@ function add_item()
 		$params[$pdata['page']['tidfield']] = array(':'.$pdata['page']['tidfield'],$pdata['page']['iid']);
 		$q 									= get_sql_insert($params);
 		$q 									= "insert into ".$pdata['page']['tname']." ".$q;
-		print_r($params); echo $q;
 	}
 	elseif(isset($_POST['action']) && $_POST['action'] == 'update')
 	{
@@ -647,9 +646,7 @@ function add_item()
 		// prepare & bind
 		$st = $pdata['conn']->prepare($q);
 		$st = db_bind_all($st,$params);
-		
-		print_r($_POST);
-		$st->debugdumpparams();
+		//$st->debugdumpparams();
 		// execute
 		$st->execute() or die(print_r($st->errorinfo()));
 	} 
