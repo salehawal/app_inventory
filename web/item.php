@@ -8,7 +8,7 @@ if(isset($_GET['section']))
 user_login_check();
 if(!empty($_POST['locationid']))
 	add_item();
-if(isset($_POST['action'])) { print_r($_POST); exit; }
+if(isset($_POST['action'])) add_item();
 ?>
 <!doctype html>
 <html>
