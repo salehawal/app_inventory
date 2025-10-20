@@ -11,12 +11,12 @@ if(isset($_POST['iid']))
 <html>
 <head>
 	<title>Inventory Collection</title>
-	<script src="js/funcs.js"></script>
-	<script language="javascript"> console.log(0);//alert(check_device());</script>
-	<link rel="stylesheet" type="text/css" href="css/bootstrap-3.3.5-dist/css/bootstrap.min.css">
+	<!-- Native CSS and JavaScript - No External Dependencies -->
+	<link rel="stylesheet" type="text/css" href="css/native.css">
 	<link rel="stylesheet" type="text/css" href="css/reset.css">
 	<link rel="stylesheet" type="text/css" href="css/main.css">
-	<script src="js/jquery-1.11.3.min.js"></script>
+	<script src="js/funcs.js"></script>
+	<script src="js/native.js"></script>
 </head>
 <body>
 	<form class="" action="" method="post">

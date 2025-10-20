@@ -16,13 +16,32 @@
 
 .mitem
 {
-    text-align:right;
-    float: right;
+    text-align: right !important;
+    float: right !important;
+    display: flex !important;
+    justify-content: flex-end !important;
+    align-items: center !important;
+}
+
+.mitem img {
+    float: right !important;
+    margin-left: auto !important;
+    margin-right: 0 !important;
 }
 
 .logo{
-	margin:0 auto;
-	text-align: left;
+	margin: 0 !important;
+	text-align: left !important;
+	float: left !important;
+	display: flex !important;
+	justify-content: flex-start !important;
+}
+
+.logo img {
+	float: left !important;
+	margin: 0 !important;
+	display: block !important;
+	margin-left: 0 !important;
 }
 
 .mspace{
@@ -279,6 +298,11 @@ label{
 
 .add-from textarea{
     font-size: 40px;
+    height: auto !important;
+    min-height: 150px !important; /* 3 lines with larger font size */
+    resize: vertical;
+    line-height: 1.4;
+    padding: 15px !important;
 }
 
 .add-from input{

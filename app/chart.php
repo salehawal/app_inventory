@@ -9,20 +9,13 @@ user_login_check();
 <html>
 <head>
   <title>inventory info collection</title>
-  <script src="js/funcs.js"></script>
   <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
-  <link rel="stylesheet" type="text/css" href="css/bootstrap-3.3.5-dist/css/bootstrap.min.css">
+  <!-- Native CSS and JavaScript - No External Dependencies -->
+  <link rel="stylesheet" type="text/css" href="css/native.css">
   <link rel="stylesheet" type="text/css" href="css/reset.css">
-  <link rel="stylesheet" type="text/css" href="css/bootstrap-fileinput-master/css/fileinput.min.css">
-  <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
-  <link rel="stylesheet" type="text/css" href="css/ionicons.min.css">
   <link rel="stylesheet" type="text/css" href="css/main.css">
-  <link rel="stylesheet" type="text/css" href="css/admin-te.min.css">
-  <link href="css/_all-skins.min.css" rel="stylesheet" type="text/css" />
-  <link href="css/blue.css" rel="stylesheet" type="text/css" />
-  <link href="css/datepicker3.css" rel="stylesheet" type="text/css" />
-
-  <script src="js/jquery-1.11.3.min.js"></script>
+  <script src="js/funcs.js"></script>
+  <script src="js/native.js"></script>
   <script src="css/bootstrap-fileinput-master/js/fileinput.min.js"></script>
   <script src="js/respond.min.js"></script>
   <script src="js/html5shiv.min.js"></script>

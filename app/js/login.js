@@ -1,22 +1,36 @@
-// Check Location Input
+// Check Location Input - Native JavaScript
 function switch_location_input()
 {
-	if( ($('#location_input_select').val() == "other" && $('#location_input_select').is(':visible')) || ($('#location_input_text').val() == "" && $('#location_input_text').is(':visible')))
-		switch_login();
+	const selectElement = document.getElementById('location_input_select');
+	const textElement = document.getElementById('location_input_text');
+	
+	// Show text input if "other" is selected
+	if (selectElement && selectElement.value === "other") {
+		if (textElement) {
+			textElement.style.display = 'block';
+			textElement.focus(); // Focus on the text input for better UX
+		}
+	} else {
+		// Hide text input if any other option is selected
+		if (textElement) {
+			textElement.style.display = 'none';
+			textElement.value = ''; // Clear the text input
+		}
+	}
 }
 
-// Switch Login Location Input
-function switch_login()
-{
-	if($('#location_input_select').is(':visible'))
-	{
-		$('#location_input_text').show();
-		$('#location_input_select').val('');
-		$('#location_input_select').hide();
+// Initialize location input behavior on page load
+document.addEventListener('DOMContentLoaded', function() {
+	const textElement = document.getElementById('location_input_text');
+	const selectElement = document.getElementById('location_input_select');
+	
+	// Hide text input by default
+	if (textElement) {
+		textElement.style.display = 'none';
 	}
-	else if($('#location_input_text').is(':visible'))
-	{
-		$('#location_input_text').hide();
-		$('#location_input_select').show();
+	
+	// Add event listener to select element
+	if (selectElement) {
+		selectElement.addEventListener('change', switch_location_input);
 	}
-}
+});

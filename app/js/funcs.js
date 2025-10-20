@@ -61,7 +61,8 @@ function gen_group_block(params)
 	var rows = 0;
 	var i = 0;
 
-	$.each(ifields, function(fieldid, fieldval) {
+	Object.keys(ifields).forEach(function(fieldid) {
+		var fieldval = ifields[fieldid];
 		// Start Row
 		if(rows == 0)
 		{
@@ -91,8 +92,8 @@ function gen_group_input_fields(params)
 {
 	var ifield;
 	var ifields  = [];
-	$.each(params.vals, function(paramid, paramval)
-	{
+	Object.keys(params.vals).forEach(function(paramid) {
+		var paramval = params.vals[paramid];
 		var ifparams 	= [];
 		ifparams 	  	= (JSON.parse(JSON.stringify(params)));
 		ifparams.iname 	= params.iname;
@@ -154,7 +155,7 @@ function gen_input_textarea(params)
 	var attr = gen_field_properties(params);
 	var val = '';
 	if(params.hasOwnProperty("value")) val = params.value;
-	return '<textarea '+attr+' rows="5" class="form-control">'+val+'</textarea>';
+	return '<textarea '+attr+' rows="3" class="form-control">'+val+'</textarea>';
 }
 
 // Create a Select Input Field
@@ -176,8 +177,8 @@ function gen_input_select(params)
 function gen_select_options(params,ival)
 {
 	var ocode = '<option value="0"> -- </option>';
-	$.each(params.vals, function(key, val)
-	{
+	Object.keys(params.vals).forEach(function(key) {
+		var val = params.vals[key];
 		// Check if Value is Index or not
 		if(ival) key = val;
 		// check if Value Selected
@@ -238,8 +239,8 @@ function gen_field_properties(params)
 {
 	var attr = '';
 	if(params.hasOwnProperty("id")) params.id = params.iid;
-	$.each(params, function(key, val)
-	{
+	Object.keys(params).forEach(function(key) {
+		var val = params[key];
 		if(typeof(val) == "string")
 		{
 			if(val != "")
