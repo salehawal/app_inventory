@@ -7,7 +7,9 @@
 function sys_init()
 {
 	global $pdata;
-	session_start();
+	if (session_status() == PHP_SESSION_NONE) {
+		session_start();
+	}
 	sys_config();
 	// load user config
 	if(!empty($_SESSION['user']))
@@ -59,7 +61,10 @@ function p_init()
 		header("location: main.php");
 	// get item detail on update
 	if(isset($_GET['iid']) && !isset($_POST['locationid']))
+	{
 		$pdata['page']['item'] = get_item_data();
+		$pdata['page']['iid'] = $_GET['iid']; // Set the item ID for JavaScript access
+	}
 }
 
 function page_config($table)
@@ -145,14 +150,18 @@ function user_login_log()
 
 function user_login_check()
 {
-	if(!$_SESSION) session_start();
+	if (session_status() == PHP_SESSION_NONE) {
+		session_start();
+	}
 	if(!$_SESSION['user']['login'])
 		header("location: login.php?action=login");
 }
 
 function user_logout()
 {
-	session_start();
+	if (session_status() == PHP_SESSION_NONE) {
+		session_start();
+	}
 	session_destroy();
 	header("location: login.php");
 }
@@ -162,7 +171,7 @@ function add_user()
 	global $sysdata;
 	if(strlen(trim($_POST['password'])) > 0)
 	{
-		$uid  	= get_next_id($sysdata['user_pfx'], $sysdata['user_table'], $sysdata['user_id_field']);
+		$uid  	= get_next_id($sysdata['user_table'], $sysdata['user_id_field'], $sysdata['user_pfx']);
 		$q 		= "insert into fict_users (fu_code, fu_username, fu_username, fu_password, fu_id) values (:fu_code, :fu_username, :fu_username, :fu_password, :fu_id)";
 		$st 	= $sysdata['conn']->prepare($q);
 		$user 	= clean_sql($_POST['username']);
@@ -236,7 +245,7 @@ function add_location()
 		$fl = find_location();
 		if($fl)
 		{
-			$lid 		= get_next_id($sysdata['location_pfx'], $sysdata['location_table'], $sysdata['flo_code']);
+			$lid 		= get_next_id($sysdata['location_table'], $sysdata['flo_code'], $sysdata['location_pfx']);
 			$q 			= "insert into fict_location (flo_code, flo_address) values (:flo_code, :flo_address)";
 			$st 		= $sysdata['conn']->prepare($q);
 			$laddress 	= clean_sql($_POST['new_location']);
@@ -298,7 +307,7 @@ function get_location_details($lid)
 
 ***********************/
 
-function get_next_id($pfx = null, $table,$field)
+function get_next_id($table, $field, $pfx = null)
 {
 	global $pdata;
 	if(!$pfx) return false;
@@ -548,7 +557,13 @@ function guess_column_info($col)
 	global $pdata;
 	if($col['data_type'] == 'varchar' || $col['data_type'] == 'int')
 	{
-		if($col['data_length'] > 100)
+		if($col['data_length'] == 1)
+		{
+			// 1-character fields are typically Yes/No or status fields
+			$col['itype'] = '62'; // Select dropdown
+			$col['vals'] = array('Y' => 'Yes', 'N' => 'No');
+		}
+		elseif($col['data_length'] > 100)
 			$col['itype'] 	= 'textarea';
 		else
 			$col['itype'] 	= 'text';
@@ -619,21 +634,56 @@ function search_item($iid)
 function add_item()
 {
 	global $pdata;
+	
 	// add post values
 	$params = gen_sql_params();
+	
+	// Add automatic audit fields for creation
+	$current_user = isset($_SESSION['user']['username']) ? $_SESSION['user']['username'] : 'system';
+	$current_date = date('Y-m-d');
+	
 	// sql
 	if(isset($_POST['action']) && $_POST['action'] == 'add')
 	{
 		//page_static_config();
 		$pfx 								= $pdata['page']['pfx'];
-		$pdata['page']['iid']  				= get_next_id($pfx,$pdata['page']['tname'],$pdata['page']['tidfield']);
+		$pdata['page']['iid']  				= get_next_id($pdata['page']['tname'], $pdata['page']['tidfield'], $pfx);
 		$params[$pdata['page']['tidfield']] = array(':'.$pdata['page']['tidfield'],$pdata['page']['iid']);
+		
+		// Add audit fields for creation - only if they exist in the table
+		$table_columns = array_column($pdata['page']['table'], 'column_name');
+		$audit_fields = array('_cre_by', '_cre_date', '_update_by', '_update_date');
+		foreach($audit_fields as $suffix) {
+			$field_name = $pfx . $suffix;
+			if (in_array($field_name, $table_columns)) {
+				if($suffix == '_cre_by' || $suffix == '_update_by') {
+					$params[$field_name] = array(':'.$field_name, $current_user);
+				} elseif($suffix == '_cre_date' || $suffix == '_update_date') {
+					$params[$field_name] = array(':'.$field_name, $current_date);
+				}
+			}
+		}
+		
 		$q 									= get_sql_insert($params);
 		$q 									= "insert into ".$pdata['page']['tname']." ".$q;
 	}
 	elseif(isset($_POST['action']) && $_POST['action'] == 'update')
 	{
 		$pdata['page']['iid']  				= $_POST['iid'];
+		
+		// Add audit fields for update - only if they exist in the table
+		$update_by_field = $pfx . '_update_by';
+		$update_date_field = $pfx . '_update_date';
+		
+		// Check if audit fields exist in table structure
+		$table_columns = array_column($pdata['page']['table'], 'column_name');
+		if (in_array($update_by_field, $table_columns)) {
+			$params[$update_by_field] = array(':'.$update_by_field, $current_user);
+		}
+		if (in_array($update_date_field, $table_columns)) {
+			$params[$update_date_field] = array(':'.$update_date_field, $current_date);
+		}
+		
 		$q 									= get_sql_update($params);
 		$params[$pdata['page']['tidfield']] = array(':'.$pdata['page']['tidfield'],$pdata['page']['iid']);
 		$q 									= "update ".$pdata['page']['tname']." set ".$q." where ".$pdata['page']['tidfield']." = :".$pdata['page']['tidfield'];
@@ -931,7 +981,7 @@ function add_options($colname, $type, $val, $aindex = false)
 	else
 	{
 		// insert new option
-		$foid 	= get_next_id('fo', 'fict_options', 'fo_code');
+		$foid 	= get_next_id('fict_options', 'fo_code', 'fo');
 		$q 		= "insert into fict_options (fo_code, fo_column, fo_column_type) values (:fo_code, :fo_column, :fo_column_type)";
 		$st 	= $sysdata['conn']->prepare($q);
 		$st->bindValue(':fo_code', 			$foid);
@@ -1017,7 +1067,7 @@ function add_multiple_images()
 	if(is_array($images))
 	{
 		foreach ($images as $key => $imgf) {
-			if(is_array($imgf) == 'array' && $imgf['error'] == 0)
+			if(is_array($imgf) && $imgf['error'] == 0)
 			{
 				$rs = add_image($imgf);
 				if(!$rs) return false;
@@ -1031,7 +1081,7 @@ function add_multiple_images()
 function add_image($img_file)
 {
 	global $pdata;
-	$id = get_next_id('im','fict_images','fim_code');
+	$id = get_next_id('fict_images', 'fim_code', 'im');
 	// sql
 	$q 	= "insert into fict_images (fim_code,fim_ref_code,fim_image) values (:fim_code, :fim_ref_code, :fim_image) ";
 	// prepare & bind
