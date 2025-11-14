@@ -701,7 +701,8 @@ function add_item()
 		$st->execute() or die(print_r($st->errorinfo()));
 	} 
 	else {  echo 'FAILED...!'; exit;  }
-	header("location: item.php?section=".$pdata['page']['section']."&iid=".$pdata['page']['iid']);
+	// Redirect to category listing page after adding an item
+	header("location: list_item.php?section=".$pdata['page']['section']);
 }
 
 function view_item()

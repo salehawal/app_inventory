@@ -98,68 +98,61 @@ try {
 <!doctype html>
 <html>
 <head>
-	<title>inventory info collection</title>
-	<!-- Native CSS and JavaScript - No External Dependencies -->
-	<link rel="stylesheet" type="text/css" href="css/native.css">
-	<link rel="stylesheet" type="text/css" href="css/reset.css">
-	<link rel="stylesheet" type="text/css" href="css/main.css">
+	<title>Inventory Collection Login</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- Optimized CSS for Full Screen Responsive Design -->
+	<link rel="stylesheet" type="text/css" href="css/optimized.css">
 	<script src="js/funcs.js"></script>
-	<script src="js/native.js"></script>
 </head>
 <body>
-<div class="content-wrapper">
+<div class="content">
 		<!-- main content -->
-		<section class="content">
-			<?php $pdata['showmenu'] = false; include('lib/header.php'); ?>
-			<div class="row">
-				<div class="col-md-12 logo">
-					<h1 class="h1">inventory collection</h1>
-				</div>
-			</div>
-			<form id="login_form" class="login_form" action="login.php" method="post">
-			<div class="row">
-				<!-- left column -->
-				<div class="col-md-12">
-					<!-- general form elements -->
-					<div class="box box-primary">
-						<!-- <div class="box-header">
-							<h3 class="box-title">system login...</h3>
-						</div> -->
-						<!-- /.box-header -->
-						<!-- form start -->
-						<div class="box-body">
-							
-							<?php if (!empty($error_message)): ?>
-								<div class="alert alert-danger">
-									<?php echo htmlspecialchars($error_message); ?>
+	<!-- Logo Header -->
+	<div class="row">
+		<div class="col-xs-12 text-center" style="margin-bottom: 30px;">
+			<img src="img/logo.png" style="max-height: 60px;" alt="Logo">
+			<h1 style="margin: 15px 0; font-size: 24px; color: #333;">Inventory Collection</h1>
+		</div>
+	</div>
+	
+	<!-- Login Form -->
+	<form id="login_form" action="login.php" method="post">
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="box">
+					<div class="box-body">
+						<?php if (!empty($error_message)): ?>
+							<div style="background: #f2dede; color: #a94442; padding: 12px; border-radius: 4px; margin-bottom: 15px; border: 1px solid #ebccd1;">
+								<?php echo htmlspecialchars($error_message); ?>
+							</div>
+						<?php endif; ?>
+						
+						<?php if(isset($_GET['action'])): ?>
+							<?php if($_GET['action'] == 'login'): ?>
+								<div style="background: #f2dede; color: #a94442; padding: 12px; border-radius: 4px; margin-bottom: 15px;">
+									Not allowed to view that page, please login first!
+								</div>
+							<?php elseif($_GET['action'] == 'error'): ?>
+								<div style="background: #f2dede; color: #a94442; padding: 12px; border-radius: 4px; margin-bottom: 15px;">
+									Username or password wrong, please try again!
 								</div>
 							<?php endif; ?>
-							
-							<?php
-								if(isset($_GET['action']))
-								{
-									if($_GET['action'] == 'login')
-									{
-										echo '<h3 class="h3 text-danger">not alowed to view that page, please login first!</h3>';
-									}
-									elseif($_GET['action'] == 'error')
-									{
-										echo '<h3 class="h3 text-danger">username or password wrong, plese try agine!</h3>';
-									}
-								}
-							?>
-							<div class="form-group" id="username_box">
-								<label for="inputusername">Name</label>
-								<input type="text" name="username" class="form-control" id="inputusername" placeholder="enter name" required>
-							</div>
-							<div class="form-group" id="password_box">
-								<label for="inputpassword">Password</label>
-								<input type="password" name="password" class="form-control" id="inputpassword" placeholder="enter password" required>
-							</div>
-							<div class="form-group" id="lbox">
-								<label for="locationid">Location</label>
-								<select class="form-control" id="location_input_select" name="locationid" required>
-									<option value="">Select a location...</option>
+						<?php endif; ?>
+						
+						<div class="form-group">
+							<label for="inputusername">Name</label>
+							<input type="text" name="username" class="form-control" id="inputusername" placeholder="Enter name" required>
+						</div>
+						
+						<div class="form-group">
+							<label for="inputpassword">Password</label>
+							<input type="password" name="password" class="form-control" id="inputpassword" placeholder="Enter password" required>
+						</div>
+						
+						<div class="form-group">
+							<label for="locationid">Location</label>
+							<select class="form-control" id="location_input_select" name="locationid" required>
+								<option value="">Select a location...</option>
 									<?php if(!empty($locations) && is_array($locations)) { foreach ($locations as $location) { ?>
 										<option value="<?php echo htmlspecialchars($location['flo_code']); ?>"><?php echo htmlspecialchars($location['flo_address']); ?></option>
 									<?php }} ?>
@@ -174,18 +167,22 @@ try {
 
 						<div class="box-footer">
 							<button type="button" class="btn btn-default" onclick="submitlogin();">login</button>
+						
+						<div class="form-group" style="margin-top: 20px;">
+							<button type="submit" class="btn btn-primary" style="width: 100%; padding: 15px; font-size: 16px; font-weight: bold;">
+								Login
+							</button>
 						</div>
-					</div><!-- /.box -->
-
-				</div><!--/.col (left) -->
-			</div>   <!-- /.row -->
-		</form>
-		</section><!-- /.content -->
-</div>
-
-<!-- Admin link at bottom left -->
-<div class="admin-link-bottom">
-	<a href="admin/" class="admin-link-small">Admin</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+	
+	<!-- Admin Link -->
+	<div style="position: fixed; bottom: 10px; left: 10px; z-index: 1000;">
+		<a href="admin/" style="font-size: 11px; color: #999; text-decoration: none; padding: 3px 6px; border-radius: 3px; background: rgba(255,255,255,0.1);">Admin</a>
+	</div>
 </div>
 
 <style>

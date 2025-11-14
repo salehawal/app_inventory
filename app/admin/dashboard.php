@@ -18,134 +18,155 @@ if (isset($_GET['action']) && $_GET['action'] === 'logout') {
 <!doctype html>
 <html>
 <head>
-    <title>Admin Dashboard - Inventory System</title>
-    <link rel="stylesheet" type="text/css" href="../css/native.css">
-    <link rel="stylesheet" type="text/css" href="../css/reset.css">
-    <link rel="stylesheet" type="text/css" href="../css/main.css">
-    <script src="../js/native.js"></script>
+    <title>Admin Dashboard - Inventory Collection</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Optimized CSS for Full Screen Responsive Design -->
+    <link rel="stylesheet" type="text/css" href="../css/optimized.css">
+    <link rel="stylesheet" type="text/css" href="../css/admin.css">
+    <script src="../js/funcs.js"></script>
 </head>
 <body>
-<div class="content-wrapper">
-    <section class="content">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="header-toolbar">
-                    <h1 class="h1">Admin Dashboard</h1>
-                    <div class="toolbar-actions">
-                        <span>Welcome, <?php echo htmlspecialchars($_SESSION['admin_username']); ?></span>
-                        <a href="?action=logout" class="btn btn-danger btn-sm">Logout</a>
-                    </div>
-                </div>
+<div class="content">
+    <!-- Header -->
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="admin-header">
+                <h1>Admin Panel</h1>
+                <div class="admin-user"><?php echo htmlspecialchars($_SESSION['admin_username']); ?></div>
             </div>
         </div>
-        
-        <div class="row">
-            <div class="col-md-12">
-                <div class="admin-menu">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="box box-primary">
-                                <div class="box-header">
-                                    <h3 class="box-title">User Management</h3>
-                                </div>
-                                <div class="box-body">
-                                    <p>Manage users and their location assignments</p>
-                                    <a href="users.php" class="btn btn-primary">Manage Users</a>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="col-md-6">
-                            <div class="box box-info">
-                                <div class="box-header">
-                                    <h3 class="box-title">Location Management</h3>
-                                </div>
-                                <div class="box-body">
-                                    <p>Add, edit, and manage inventory locations</p>
-                                    <a href="locations.php" class="btn btn-info">Manage Locations</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    </div>
+
+    <!-- Navigation Menu -->
+    <div class="row btn-nav-menu">
+        <div class="col-xs-12">
+            <button type="button" class="btn btn-default" onclick="go_to_page('users.php');">User Management</button>
         </div>
-        
-        <div class="row">
-            <div class="col-md-12">
-                <div class="box box-default">
-                    <div class="box-header">
-                        <h3 class="box-title">Quick Stats</h3>
-                    </div>
-                    <div class="box-body">
-                        <?php
-                        // Get quick statistics
-                        try {
-                            $pdo = db_connect();
-                            
-                            $stmt = $pdo->query("SELECT COUNT(*) as user_count FROM fict_users");
-                            $user_count = $stmt->fetch()['user_count'];
-                            
-                            $stmt = $pdo->query("SELECT COUNT(*) as location_count FROM fict_location");
-                            $location_count = $stmt->fetch()['location_count'];
-                            
-                        } catch (Exception $e) {
-                            $user_count = 0;
-                            $location_count = 0;
-                        }
-                        ?>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="stat-box">
-                                    <h4>Total Users</h4>
-                                    <p class="stat-number"><?php echo $user_count; ?></p>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="stat-box">
-                                    <h4>Total Locations</h4>
-                                    <p class="stat-number"><?php echo $location_count; ?></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    </div>
+    
+    <div class="row btn-nav-menu">
+        <div class="col-xs-12">
+            <button type="button" class="btn btn-default" onclick="go_to_page('locations.php');">Location Management</button>
         </div>
-    </section>
+    </div>
+    
+    <!-- Logout button -->
+    <div class="row btn-nav-menu logout-section">
+        <div class="col-xs-12">
+            <button type="button" class="btn btn-danger btn-logout-main" onclick="confirmLogout();">Logout</button>
+        </div>
+    </div>
 </div>
 
 <style>
-.header-toolbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+/* Simple Admin Styles - Matching Main App */
+.admin-header {
+    padding: 25px 20px;
+    background: #f8f9fa;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.admin-header h1 {
+    margin: 0;
+    font-size: 28px;
+    color: #333;
+    font-weight: bold;
+}
+
+.admin-user {
+    font-size: 14px;
+    color: #666;
+    margin-top: 8px;
+}
+
+.content {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.btn-nav-menu {
     margin-bottom: 20px;
 }
 
-.toolbar-actions {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-.admin-menu {
-    margin-bottom: 30px;
-}
-
-.stat-box {
-    text-align: center;
-    padding: 20px;
-    background: #f8f9fa;
-    border-radius: 5px;
-}
-
-.stat-number {
-    font-size: 2em;
+.btn-nav-menu button {
+    width: 100%;
+    padding: 30px 25px;
+    font-size: 18px;
     font-weight: bold;
+    text-align: center;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    color: #333;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.btn-nav-menu button:hover {
+    background: #f5f5f5;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
     color: #337ab7;
-    margin: 10px 0;
+}
+
+.logout-section {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #ddd;
+    text-align: center;
+}
+
+.btn-logout-main {
+    padding: 15px 30px;
+    font-size: 16px;
+    font-weight: bold;
+    background: #d9534f;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-logout-main:hover {
+    background: #c9302c;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .admin-header {
+        padding: 20px 15px;
+    }
+    
+    .admin-header h1 {
+        font-size: 24px;
+    }
+    
+    .content {
+        padding: 15px;
+    }
+    
+    .btn-nav-menu button {
+        padding: 25px 20px;
+        font-size: 16px;
+    }
 }
 </style>
+
+<script>
+function go_to_page(url) {
+    window.location.href = url;
+}
+
+function confirmLogout() {
+    if (confirm('Are you sure you want to logout?')) {
+        window.location.href = '?action=logout';
+    }
+}
+</script>
 </body>
 </html>

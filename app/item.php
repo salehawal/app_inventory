@@ -2,9 +2,36 @@
 require_once('lib/core.php');
 require_once('lib/app.php');
 sys_init();
-// get page data
-if(isset($_GET['section']))
+
+// Debug: Check what parameters are passed
+if(isset($_GET['debug'])) {
+	echo '<pre style="background: #f4f4f4; padding: 15px; margin: 15px;">';
+	echo "GET Parameters:\n";
+	print_r($_GET);
+	echo "\nPOST Parameters:\n";
+	print_r($_POST);
+	echo '</pre>';
+}
+
+// get page data - always initialize if section is provided
+if(isset($_GET['section'])) {
 	p_init();
+	// Debug: Check if initialization worked
+	if(isset($_GET['debug'])) {
+		echo '<pre style="background: #e7f3ff; padding: 15px; margin: 15px;">';
+		echo "After p_init():\n";
+		echo "Page data exists: " . (isset($pdata['page']) ? 'Yes' : 'No') . "\n";
+		echo "Table data exists: " . (isset($pdata['page']['table']) ? 'Yes' : 'No') . "\n";
+		if(isset($pdata['page']['table'])) {
+			echo "Table fields count: " . count($pdata['page']['table']) . "\n";
+			echo "First 3 fields:\n";
+			for($i = 0; $i < min(3, count($pdata['page']['table'])); $i++) {
+				echo "  - " . $pdata['page']['table'][$i]['column_name'] . "\n";
+			}
+		}
+		echo '</pre>';
+	}
+}
 user_login_check();
 // Handle item operations (add/update) - prevent double calls
 if(isset($_POST['action']) || !empty($_POST['locationid']))
@@ -13,13 +40,11 @@ if(isset($_POST['action']) || !empty($_POST['locationid']))
 <!doctype html>
 <html>
 <head>
-	<title>inventory collection</title>
-	<!-- Native CSS and JavaScript - No External Dependencies -->
-	<link rel="stylesheet" type="text/css" href="css/native.css">
-	<link rel="stylesheet" type="text/css" href="css/reset.css">
-	<link rel="stylesheet" type="text/css" href="css/main.css">
+	<title>Inventory Collection</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- Optimized CSS for Full Screen Responsive Design -->
+	<link rel="stylesheet" type="text/css" href="css/optimized.css">
 	<script src="js/funcs.js"></script>
-	<script src="js/native.js"></script>
 </head>
 <body>
 <form id="data_form" action="item.php?section=<?php echo $pdata['page']['section']; ?>" method="post" enctype="multipart/form-data">
@@ -45,25 +70,89 @@ if(isset($_POST['action']) || !empty($_POST['locationid']))
 			<?php include('lib/form_btns.php'); ?>
 			<br>
 			<div class="row add-from">
-				<div class="col-md-1"></div>
-				<div class="col-md-10">
-					<div class="box box-primary">
+				<div class="col-xs-12">
+					<div class="box">
 						<div class="box-header">
-							<h3 class="box-title">details</h3>
-							<script type="text/javascript">
-							<?php view_item(); ?>
-							</script>
+							<h3 class="box-title">Item Details</h3>
+						</div>
+						<div class="box-body">
+							<?php 
+							// Debug information
+							if(!isset($pdata['page']['table']) || !is_array($pdata['page']['table'])) {
+								echo '<div class="alert" style="background: #fff3cd; color: #856404; padding: 15px; border-radius: 4px; margin-bottom: 15px;">';
+								echo '<strong>Debug Info:</strong><br>';
+								echo 'Section: ' . (isset($_GET['section']) ? $_GET['section'] : 'Not set') . '<br>';
+								echo 'Page data initialized: ' . (isset($pdata['page']) ? 'Yes' : 'No') . '<br>';
+								echo 'Table data: ' . (isset($pdata['page']['table']) ? 'Yes (' . count($pdata['page']['table']) . ' fields)' : 'No') . '<br>';
+								if(isset($pdata['page']['table']) && !is_array($pdata['page']['table'])) {
+									echo 'Table data type: ' . gettype($pdata['page']['table']) . '<br>';
+								}
+								echo '</div>';
+							}
+							
+							// Generate form fields directly in PHP
+							if(isset($pdata['page']['table']) && is_array($pdata['page']['table'])) {
+								foreach($pdata['page']['table'] as $key => $col) {
+									if(check_allowed_field($col['column_name'])) {
+										$col['i'] = get_column_info($col);
+										if(is_array($col['i'])) {
+											$lname = (isset($col['i']['lname'])) ? $col['i']['lname'] : get_clean_column_name($col['i']['iname']);
+											echo '<div class="form-group">';
+											echo '<label for="' . htmlspecialchars($col['i']['iname']) . '">' . htmlspecialchars($lname) . ':</label>';
+											
+											// Generate appropriate input based on type
+											$inputType = isset($col['i']['itype']) ? $col['i']['itype'] : 'text';
+											$inputName = isset($col['i']['iname']) ? $col['i']['iname'] : '';
+											$inputValue = isset($col['i']['value']) ? $col['i']['value'] : '';
+											$isRequired = isset($col['i']['required']) ? $col['i']['required'] : false;
+											
+											switch($inputType) {
+												case 'textarea':
+													echo '<textarea class="form-control" name="' . htmlspecialchars($inputName) . '" id="' . htmlspecialchars($inputName) . '"';
+													if($isRequired) echo ' required';
+													echo '>' . htmlspecialchars($inputValue) . '</textarea>';
+													break;
+													
+												case 'select':
+													echo '<select class="form-control" name="' . htmlspecialchars($inputName) . '" id="' . htmlspecialchars($inputName) . '"';
+													if($isRequired) echo ' required';
+													echo '>';
+													if(isset($col['i']['options']) && is_array($col['i']['options'])) {
+														foreach($col['i']['options'] as $option) {
+															$optValue = is_array($option) ? $option['value'] : $option;
+															$optText = is_array($option) ? $option['text'] : $option;
+															$selected = ($optValue == $inputValue) ? ' selected' : '';
+															echo '<option value="' . htmlspecialchars($optValue) . '"' . $selected . '>' . htmlspecialchars($optText) . '</option>';
+														}
+													}
+													echo '</select>';
+													break;
+													
+												default:
+													echo '<input type="' . htmlspecialchars($inputType) . '" class="form-control" name="' . htmlspecialchars($inputName) . '" id="' . htmlspecialchars($inputName) . '" value="' . htmlspecialchars($inputValue) . '"';
+													if($isRequired) echo ' required';
+													echo '>';
+											}
+											
+											echo '</div>';
+										}
+									}
+								}
+							} else {
+								echo '<p class="text-muted">No form fields configured for this section.</p>';
+							}
+							?>
 						</div>
 					</div>
 				</div>
-				<div class="col-md-1"></div>
 			</div>
 			<div class="row add-from">
-				<div class="col-md-1"></div>
-				<div class="col-md-10">
-					<div class="box box-primary">
+				<div class="col-xs-12">
+					<div class="box">
 						<div class="box-header">
-							<h3 class="box-title">pictures</h3>
+							<h3 class="box-title">Images</h3>
+						</div>
+						<div class="box-body">
 							<div class="form-group" id="fupload">
 								<div class="native-file-upload-area" id="fileUploadArea">
 									<div class="upload-icon">📁</div>
@@ -78,7 +167,6 @@ if(isset($_POST['action']) || !empty($_POST['locationid']))
 						</div>
 					</div>
 				</div>
-				<div class="col-md-1"></div>
 			</div>
 		</section>
 		<section class="contect">
@@ -206,6 +294,14 @@ document.addEventListener('keydown', function(event) {
         if (modal.style.display === 'block') {
             closePreview();
         }
+    }
+});
+
+// Auto-focus on first input when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    const firstInput = document.querySelector('input[type="text"], input[type="number"], textarea, select');
+    if (firstInput) {
+        firstInput.focus();
     }
 });
 </script>

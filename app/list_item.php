@@ -15,53 +15,68 @@ get_items();
 <!doctype html>
 <html>
 <head>
-	<title>inventory collection</title>
-	<!-- Native CSS and JavaScript - No External Dependencies -->
-	<link rel="stylesheet" type="text/css" href="css/native.css">
-	<link rel="stylesheet" type="text/css" href="css/reset.css">
-	<link rel="stylesheet" type="text/css" href="css/main.css">
+	<title>Inventory Collection</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- Optimized CSS for Full Screen Responsive Design -->
+	<link rel="stylesheet" type="text/css" href="css/optimized.css">
 	<script src="js/funcs.js"></script>
-	<script src="js/native.js"></script>
 </head>
 <body>
 <div class="content-wrapper">
 	<?php include('lib/header.php'); ?>
-	<!-- main content -->
-	<section class="content">
-		<div class="row">
-			<div class="input-btn col-xs-12" style="text-align:left;">
-				<input name="brn01" type="button" class="btn btn-danger action_btn" value="add new" onclick="go_to_page('item.php?section=<?php echo $pdata['page']['section']; ?>');" />
-			</div>
-		</div><br><br>
-		<div class="row data-table">
-			<div class="col-xs-12">
-				<div class="box">
-					<div class="box-header">
-						<h3 class="box-title"><?php echo $pdata['page']['pname']; ?>s data...</h3>
-					</div><!-- /.box-header -->
-					<div class="box-body">
-					<table class="table table-bordered table-striped idata-table">
-					  <thead>
-				          <?php echo $pdata['data']['th']; ?>
-				      </thead>
+	
+	<!-- Navigation Buttons -->
+	<div class="row" style="margin-bottom: 15px;">
+		<div class="col-xs-6">
+			<button type="button" class="btn btn-default" onclick="go_to_page('main.php');" style="width: 100%;">
+				← Back to Menu
+			</button>
+		</div>
+		<div class="col-xs-6">
+			<button type="button" class="btn btn-primary" onclick="go_to_page('item.php?section=<?php echo $pdata['page']['section']; ?>');" style="width: 100%;">
+				Add New <?php echo $pdata['page']['pname']; ?>
+			</button>
+		</div>
+	</div>
+	
+	<!-- Data Table -->
+	<div class="row">
+		<div class="col-xs-12">
+			<div class="box">
+				<div class="box-header">
+					<h3 class="box-title"><?php echo $pdata['page']['pname']; ?>s Data</h3>
+				</div>
+				<div class="box-body">
+					<table class="table table-bordered table-striped">
+						<thead>
+							<?php echo $pdata['data']['th']; ?>
+						</thead>
 						<tbody>
 							<?php echo $pdata['data']['td']; ?>
 						</tbody>
 					</table>
-					</div><!-- /.box-body -->
-				</div><!-- /.box -->
+				</div>
 			</div>
 		</div>
-	</section>
+	</div>
 </div>
 <script>
-// Native JavaScript implementation - No jQuery dependencies
-
-// Initialize DataTable when DOM is ready
-domReady(function() {
-    const table = document.getElementById('example1');
-    if (table) {
-        createNativeDataTable(table);
+// Simple table enhancement without external dependencies
+document.addEventListener('DOMContentLoaded', function() {
+    // Add mobile data labels for responsive tables
+    const table = document.querySelector('.table');
+    if (table && window.innerWidth <= 480) {
+        const headers = table.querySelectorAll('th');
+        const rows = table.querySelectorAll('tbody tr');
+        
+        headers.forEach((header, index) => {
+            rows.forEach(row => {
+                const cell = row.children[index];
+                if (cell) {
+                    cell.setAttribute('data-label', header.textContent.trim());
+                }
+            });
+        });
     }
 });
 </script>
