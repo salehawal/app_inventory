@@ -1,0 +1,145 @@
+{
+    "sys_users": [
+        {
+            "sus_id": "USR0001",
+            "sus_username": "admin",
+            "sus_role": "admin",
+            "sus_password": "admin123",
+            "sus_rep_manager": "",
+            "sus_location": "LOC0001",
+            "sus_cre_by": "system",
+            "sus_cre_date": "2025-11-14",
+            "sus_remarks": "System Administrator"
+        },
+        {
+            "sus_id": "USR0002",
+            "sus_username": "user",
+            "sus_role": "user",
+            "sus_password": "user123",
+            "sus_rep_manager": "admin",
+            "sus_location": "LOC0001",
+            "sus_cre_by": "admin",
+            "sus_cre_date": "2025-11-14",
+            "sus_remarks": "Standard user",
+            "selected_location": "LOC0001",
+            "selected_location_name": "Primary office location"
+        }
+    ],
+    "sys_location": [
+        {
+            "slc_id": "LOC0001",
+            "slc_type": "Office",
+            "slc_address": "Main Building Floor 1",
+            "slc_desc": "Primary office location",
+            "slc_cre_by": "admin",
+            "slc_cre_date": "2025-11-14"
+        },
+        {
+            "slc_id": "LOC0002",
+            "slc_type": "Warehouse",
+            "slc_address": "Storage Building Floor 2",
+            "slc_desc": "Equipment storage location",
+            "slc_cre_by": "admin",
+            "slc_cre_date": "2025-11-14"
+        },
+        {
+            "slc_id": "LOC0003",
+            "slc_type": "Data Center",
+            "slc_address": "Server Room Building B",
+            "slc_desc": "IT equipment and server location",
+            "slc_cre_by": "admin",
+            "slc_cre_date": "2025-11-14"
+        }
+    ],
+    "inv_aircondition": [
+        {
+            "iac_id": "IAC0001",
+            "iac_desc": "Central AC Unit - Main Hall",
+            "iac_location": "LOC0001",
+            "iac_operational": "Y",
+            "iac_cre_by": "admin",
+            "iac_cre_date": "2025-11-14"
+        },
+        {
+            "iac_id": "IAC0002",
+            "iac_desc": "AC Unit - Conference Room",
+            "iac_location": "LOC0001",
+            "iac_operational": "Y",
+            "iac_cre_by": "admin",
+            "iac_cre_date": "2025-11-14"
+        }
+    ],
+    "inv_batteries": [
+        {
+            "iba_id": "IBA0001",
+            "iba_battery": "Li-Ion 12V",
+            "iba_operational": "Y",
+            "iba_camera_unit": "CAM-UNIT-001",
+            "iba_location": "LOC0001"
+        },
+        {
+            "iba_id": "IBA0002",
+            "iba_battery": "NiMH 9V",
+            "iba_operational": "N",
+            "iba_camera_unit": "CAM-UNIT-002",
+            "iba_location": "LOC0002"
+        }
+    ],
+    "inv_hardware": [
+        {
+            "ihd_id": "IHD0001",
+            "ihd_type": "Computer",
+            "ihd_make": "Dell",
+            "ihd_model": "OptiPlex 3080",
+            "ihd_location": "LOC0001",
+            "ihd_cre_by": "admin",
+            "ihd_cre_date": "2025-11-14"
+        },
+        {
+            "ihd_id": "IHD0002",
+            "ihd_type": "Server",
+            "ihd_make": "HP",
+            "ihd_model": "ProLiant DL380",
+            "ihd_location": "LOC0003",
+            "ihd_cre_by": "admin",
+            "ihd_cre_date": "2025-11-14"
+        },
+        {
+            "ihd_id": "IHD0003",
+            "ihd_type": "a",
+            "ihd_make": "a",
+            "ihd_model": "a",
+            "ihd_location": "LOC0001",
+            "ihd_cre_by": "user",
+            "ihd_cre_date": "2025-11-15"
+        }
+    ],
+    "sys_images": [],
+    "sys_user_locations": [
+        {
+            "sul_id": 1,
+            "sul_user_id": "USR0001",
+            "sul_location_id": "LOC0001",
+            "sul_assigned_date": "2025-11-14",
+            "sul_assigned_by": "system",
+            "sul_status": "active"
+        },
+        {
+            "sul_id": 2,
+            "sul_user_id": "USR0002",
+            "sul_location_id": "LOC0001",
+            "sul_assigned_date": "2025-11-14",
+            "sul_assigned_by": "admin",
+            "sul_status": "active"
+        }
+    ],
+    "counters": {
+        "iac_id": 2,
+        "iba_id": 2,
+        "ihd_id": 3,
+        "sig_id": 0,
+        "slc_id": 3,
+        "sus_id": 2,
+        "sul_id": 0
+    }
+}
