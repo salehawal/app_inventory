@@ -1,0 +1,1896 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Inventory App</title>
+  <style>
+    :root {
+      --bg: #f3f5f9;
+      --panel: #ffffff;
+      --accent: #2563eb;
+      --accent-strong: #1d4ed8;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --border: #d1d5db;
+      --danger: #dc2626;
+      --shadow: 0 12px 36px rgba(15, 23, 42, 0.12);
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      color: var(--text);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    a {
+      color: inherit;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+      color: inherit;
+    }
+
+    button {
+      border: none;
+      cursor: pointer;
+      border-radius: 8px;
+      padding: 0.65rem 1rem;
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+
+    button:focus {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    .primary {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .primary:hover {
+      background: var(--accent-strong);
+    }
+
+    .secondary {
+      background: rgba(37, 99, 235, 0.12);
+      color: var(--accent-strong);
+    }
+
+    .secondary:hover {
+      background: rgba(37, 99, 235, 0.2);
+    }
+
+    .ghost {
+      background: transparent;
+      color: var(--text);
+    }
+
+    .ghost:hover {
+      background: rgba(15, 23, 42, 0.05);
+    }
+
+    .danger {
+      color: var(--danger);
+    }
+
+    .danger:hover {
+      background: rgba(220, 38, 38, 0.08);
+    }
+
+    .small {
+      padding: 0.35rem 0.65rem;
+      font-size: 0.85rem;
+    }
+
+    .welcome {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 2.5rem 1.5rem;
+      background: radial-gradient(circle at top, #ffffff 0, #edf2f7 45%, #e0e7ff 100%);
+    }
+
+    .card {
+      width: min(420px, 100%);
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(18px);
+      border-radius: 20px;
+      padding: 2.5rem 2.25rem;
+      box-shadow: var(--shadow);
+      display: grid;
+      gap: 1.25rem;
+    }
+
+    .card h1 {
+      margin: 0;
+      font-size: 1.9rem;
+    }
+
+    .muted {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .hint {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin: 0;
+    }
+
+    .form-stack {
+      display: grid;
+      gap: 1rem;
+    }
+
+    label {
+      display: grid;
+      gap: 0.4rem;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    input,
+    select,
+    textarea {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.65rem 0.75rem;
+      background: #ffffff;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .message {
+      min-height: 1.1rem;
+      margin-top: 0.2rem;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    .message.error {
+      color: var(--danger);
+    }
+
+    .app-shell {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      background: var(--bg);
+    }
+
+    .sidebar {
+      background: #111827;
+      color: #f9fafb;
+      padding: 2rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+    }
+
+    .brand {
+      display: grid;
+      gap: 0.35rem;
+    }
+
+    .brand .logo {
+      font-size: 2.4rem;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 1.4rem;
+    }
+
+    .nav {
+      display: grid;
+      gap: 0.5rem;
+    }
+
+    .nav-link {
+      justify-content: flex-start;
+      text-align: left;
+      background: rgba(255, 255, 255, 0.08);
+      color: #f9fafb;
+      border-radius: 10px;
+      padding: 0.75rem 1rem;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+    }
+
+    .nav-link.active {
+      background: #f9fafb;
+      color: #1f2937;
+    }
+
+    .logout {
+      margin-top: auto;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      color: #f9fafb;
+    }
+
+    .logout:hover {
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .content {
+      padding: 2.5rem;
+      display: grid;
+      gap: 2rem;
+    }
+
+    .view {
+      display: none;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .view.active {
+      display: flex;
+    }
+
+    .view-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+    }
+
+    .view-header h2 {
+      margin: 0 0 0.25rem;
+      font-size: 2rem;
+    }
+
+    .panel {
+      background: var(--panel);
+      border-radius: 18px;
+      padding: 1.75rem;
+      box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08);
+      display: grid;
+      gap: 1rem;
+    }
+
+    .form-grid {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+
+    .form-grid .wide {
+      grid-column: 1 / -1;
+    }
+
+    .form-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.95rem;
+    }
+
+    thead {
+      background: rgba(37, 99, 235, 0.08);
+    }
+
+    th,
+    td {
+      padding: 0.85rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.3);
+      vertical-align: top;
+    }
+
+    .table-panel {
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .table-scroll {
+      overflow-x: auto;
+    }
+
+    .table-actions {
+      display: flex;
+      gap: 0.35rem;
+    }
+
+    .empty {
+      text-align: center;
+      color: var(--muted);
+      padding: 1.5rem 0;
+    }
+
+    .stat {
+      display: grid;
+      text-align: right;
+      gap: 0.2rem;
+    }
+
+    .stat-value {
+      font-size: 2.4rem;
+      font-weight: 700;
+    }
+
+    .stat-label {
+      font-size: 0.9rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      background: rgba(37, 99, 235, 0.16);
+      color: var(--accent-strong);
+      padding: 0.15rem 0.6rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .tool-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .import-label {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.45rem;
+      cursor: pointer;
+      position: relative;
+      padding: 0.55rem 0.9rem;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .import-label span {
+      pointer-events: none;
+    }
+
+    .import-label input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .image-field {
+      display: grid;
+      gap: 0.75rem;
+    }
+
+    .image-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    .image-grid {
+      display: grid;
+      gap: 0.75rem;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    }
+
+    .image-card {
+      background: rgba(37, 99, 235, 0.06);
+      border-radius: 12px;
+      border: 1px solid rgba(37, 99, 235, 0.15);
+      padding: 0.75rem;
+      display: grid;
+      gap: 0.45rem;
+    }
+
+    .image-card img {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+
+    .image-card figcaption {
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .image-card small {
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    .image-empty {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .meta-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 0.35rem;
+      font-size: 0.95rem;
+    }
+
+    .meta-list strong {
+      margin-right: 0.5rem;
+    }
+
+    .location-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 0.5rem;
+    }
+
+    .location-entry {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(37, 99, 235, 0.08);
+      border: 1px solid rgba(37, 99, 235, 0.18);
+      border-radius: 10px;
+      padding: 0.6rem 0.75rem;
+      gap: 1rem;
+    }
+
+    .location-entry span {
+      font-weight: 600;
+    }
+
+    @media (max-width: 1080px) {
+      .app-shell {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: relative;
+        height: auto;
+        border-bottom-left-radius: 24px;
+        border-bottom-right-radius: 24px;
+      }
+
+      .content {
+        padding: 2rem 1.5rem 3rem;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .view-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .stat {
+        width: 100%;
+        text-align: left;
+      }
+
+      .form-actions {
+        width: 100%;
+      }
+
+      .tool-grid {
+        flex-direction: column;
+        align-items: stretch;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+  <script>
+    // Centralized data shape with versioning. Inventory images are stored as base64 strings.
+    const DEFAULT_DB = {
+      version: 4,
+      users: [
+        { id: "admin", name: "admin", role: "admin", password: "admin123" },
+        { id: "user", name: "user", role: "user", password: "user123" }
+      ],
+      locations: ["Main Warehouse", "Cold Storage", "Showroom"],
+      items: [
+        {
+          id: "seed-item-001",
+          sku: "INV-001",
+          name: "Barcode Scanner",
+          description: "Wireless scanner staged for intake checkpoints.",
+          quantity: 3,
+          location: "Main Warehouse",
+          createdBy: "admin",
+          createdAt: new Date().toISOString(),
+          images: []
+        },
+        {
+          id: "seed-item-002",
+          sku: "INV-002",
+          name: "Refrigerated Crate",
+          description: "Temperature-controlled crate reserved for perishables.",
+          quantity: 12,
+          location: "Cold Storage",
+          createdBy: "admin",
+          createdAt: new Date().toISOString(),
+          images: []
+        },
+        {
+          id: "seed-item-003",
+          sku: "INV-003",
+          name: "Showroom Display Kit",
+          description: "Demo bundle for showroom product launches.",
+          quantity: 6,
+          location: "Showroom",
+          createdBy: "admin",
+          createdAt: new Date().toISOString(),
+          images: []
+        }
+      ],
+      logs: [],
+      settings: {
+        apiUrl: "",
+        autoSync: true
+      }
+    };
+
+    const STORAGE_KEY = "mawal_inventory_db";
+    const SESSION_KEY = "mawal_inventory_session";
+
+    const state = {
+      db: null,
+      session: null,
+      activeView: "dashboard",
+      inventoryDraftImages: [],
+      editingItem: null,
+      editingUser: null,
+      storageError: false
+    };
+
+    const flagStorageError = (context, error) => {
+      console.error(`Inventory App storage failure during ${context}`, error);
+      state.storageError = true;
+    };
+
+    const $ = (selector, scope = document) => scope.querySelector(selector);
+    const $$ = (selector, scope = document) => Array.from(scope.querySelectorAll(selector));
+
+    const storage = {
+      load() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          return raw ? JSON.parse(raw) : null;
+        } catch (err) {
+          flagStorageError("load database", err);
+          return null;
+        }
+      },
+      save(db) {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(db));
+        } catch (err) {
+          flagStorageError("save database", err);
+        }
+      },
+      loadSession() {
+        try {
+          const raw = sessionStorage.getItem(SESSION_KEY);
+          return raw ? JSON.parse(raw) : null;
+        } catch (err) {
+          flagStorageError("load session", err);
+          return null;
+        }
+      },
+      saveSession(session) {
+        try {
+          sessionStorage.setItem(SESSION_KEY, JSON.stringify(session));
+        } catch (err) {
+          flagStorageError("save session", err);
+        }
+      },
+      clearSession() {
+        try {
+          sessionStorage.removeItem(SESSION_KEY);
+        } catch (err) {
+          flagStorageError("clear session", err);
+        }
+      }
+    };
+
+    const deepClone = (value) => {
+      if (typeof structuredClone === "function") {
+        try {
+          return structuredClone(value);
+        } catch (error) {
+          console.warn("structuredClone failed, using JSON clone fallback", error);
+        }
+      }
+      return JSON.parse(JSON.stringify(value));
+    };
+
+    const randomId = () => {
+      if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
+        try {
+          return crypto.randomUUID();
+        } catch (error) {
+          console.warn("crypto.randomUUID failed, using fallback id", error);
+        }
+      }
+      return `id-${Math.random().toString(36).slice(2)}-${Date.now().toString(36)}`;
+    };
+
+    const normalizeUser = (user) => {
+      const idCandidate = typeof user?.id === "string" ? user.id.trim() : "";
+      const usernameCandidate = typeof user?.username === "string" ? user.username.trim() : "";
+      const nameCandidate = typeof user?.name === "string" ? user.name.trim() : "";
+      const resolvedId = idCandidate || usernameCandidate || nameCandidate || randomId();
+
+      const roleCandidate = typeof user?.role === "string" ? user.role.trim().toLowerCase() : "";
+      const resolvedRole = roleCandidate === "admin" ? "admin" : "user";
+
+      const passwordCandidate = typeof user?.password === "string" ? user.password.trim() : "";
+      const resolvedPassword = passwordCandidate || "password";
+
+      return {
+        id: resolvedId,
+        name: resolvedId,
+        role: resolvedRole,
+        password: resolvedPassword
+      };
+    };
+
+    const normalizeDb = (db) => {
+      if (!db || typeof db !== "object") {
+        return deepClone(DEFAULT_DB);
+      }
+      const normalized = deepClone(DEFAULT_DB);
+      normalized.users = Array.isArray(db.users) ? db.users : normalized.users;
+      normalized.items = Array.isArray(db.items) ? db.items : normalized.items;
+      normalized.logs = Array.isArray(db.logs) ? db.logs : normalized.logs;
+      normalized.locations = Array.isArray(db.locations) ? db.locations : normalized.locations;
+      normalized.version =
+        typeof db.version === "number" ? Math.max(db.version, DEFAULT_DB.version) : DEFAULT_DB.version;
+
+      const mergedSettings = Object.assign({}, normalized.settings, db.settings || {});
+      mergedSettings.apiUrl = typeof mergedSettings.apiUrl === "string" ? mergedSettings.apiUrl.trim() : "";
+      mergedSettings.autoSync = mergedSettings.autoSync !== false;
+      normalized.settings = mergedSettings;
+
+      normalized.users = normalized.users.map(normalizeUser);
+
+      const locationMap = new Map();
+      const seedLocations = Array.isArray(db.locations) ? db.locations : normalized.locations;
+      [...normalized.locations, ...seedLocations].forEach((value) => {
+        if (typeof value !== "string") return;
+        const trimmed = value.trim();
+        if (!trimmed) return;
+        const key = trimmed.toLowerCase();
+        if (!locationMap.has(key)) {
+          locationMap.set(key, trimmed);
+        }
+      });
+
+      normalized.items = normalized.items.map((item) => {
+        const locationValue = typeof item.location === "string" ? item.location.trim() : "";
+        if (locationValue) {
+          const key = locationValue.toLowerCase();
+          if (!locationMap.has(key)) {
+            locationMap.set(key, locationValue);
+          }
+        }
+
+        const createdBy = typeof item.createdBy === "string" ? item.createdBy.trim() : "admin";
+        const createdAt = (() => {
+          const candidate = typeof item.createdAt === "string" ? item.createdAt : "";
+          const date = new Date(candidate);
+          return Number.isFinite(date.valueOf()) ? date.toISOString() : new Date().toISOString();
+        })();
+
+        return {
+          ...item,
+          name: typeof item.name === "string" && item.name.trim() ? item.name.trim() : "Untitled Item",
+          sku: typeof item.sku === "string" ? item.sku.trim() : "",
+          description: typeof item.description === "string" ? item.description.trim() : "",
+          quantity: Number.isFinite(Number(item.quantity)) ? Number(item.quantity) : 0,
+          location: locationValue,
+          createdBy: createdBy || "admin",
+          createdAt,
+          id: item.id || randomId(),
+          images: Array.isArray(item.images) ? item.images : []
+        };
+      });
+
+      normalized.locations = Array.from(locationMap.values());
+      if (!normalized.locations.length) {
+        normalized.locations = deepClone(DEFAULT_DB.locations);
+      }
+
+      normalized.users = Array.from(
+        new Map(
+          normalized.users.map((user) => [user.id.toLowerCase(), user])
+        ).values()
+      );
+
+      normalized.users = normalized.users.map((user) => ({ ...user, name: user.id }));
+
+      const adminTemplate = deepClone(DEFAULT_DB.users[0]);
+      const adminIndex = normalized.users.findIndex((user) => user.id.toLowerCase() === "admin");
+      if (adminIndex === -1) {
+        normalized.users.unshift(adminTemplate);
+      } else {
+        const adminAccount = normalized.users[adminIndex];
+        adminAccount.id = "admin";
+        adminAccount.role = "admin";
+        adminAccount.name = "admin";
+        adminAccount.password = adminTemplate.password;
+      }
+
+      normalized.users.sort((a, b) => a.id.toLowerCase().localeCompare(b.id.toLowerCase()));
+
+      return normalized;
+    };
+
+    const initialize = () => {
+      const existing = storage.load();
+      state.db = existing ? normalizeDb(existing) : deepClone(DEFAULT_DB);
+
+      const cachedSession = storage.loadSession();
+      if (cachedSession) {
+        const matchedUser = state.db.users.find((u) => u.id === cachedSession.userId);
+        if (matchedUser) {
+          state.session = { userId: matchedUser.id };
+        } else {
+          storage.clearSession();
+        }
+      }
+
+      storage.save(state.db);
+
+      renderApp();
+    };
+
+    const setActiveView = (viewId) => {
+      state.activeView = viewId;
+      renderDashboard();
+    };
+
+    const setMessage = (el, message, type = "") => {
+      if (!el) return;
+      el.textContent = message;
+      el.classList.toggle("error", type === "error");
+    };
+
+    const upsertItem = (payload) => {
+      const now = new Date().toISOString();
+      if (payload.id) {
+        const index = state.db.items.findIndex((item) => item.id === payload.id);
+        if (index !== -1) {
+          state.db.items[index] = {
+            ...state.db.items[index],
+            ...payload,
+            updatedAt: now
+          };
+        }
+      } else {
+        state.db.items.push({
+          ...payload,
+          id: randomId(),
+          createdAt: now,
+          createdBy: state.session?.userId,
+          images: Array.isArray(payload.images) ? payload.images : []
+        });
+      }
+      storage.save(state.db);
+    };
+
+    const deleteItem = (id) => {
+      state.db.items = state.db.items.filter((item) => item.id !== id);
+      storage.save(state.db);
+    };
+
+    const upsertUser = (payload) => {
+      const id = typeof payload.id === "string" ? payload.id.trim() : "";
+      if (!id) {
+        return;
+      }
+      const role = payload.role === "admin" ? "admin" : "user";
+      const passwordInput = typeof payload.password === "string" ? payload.password.trim() : "";
+
+      const existingIndex = state.db.users.findIndex((user) => user.id === id);
+      if (existingIndex !== -1) {
+        const current = state.db.users[existingIndex];
+        const password = passwordInput || current.password || "password";
+        state.db.users[existingIndex] = { ...current, id, name: id, role, password };
+      } else {
+        const password = passwordInput || "password";
+        state.db.users.push({ id, name: id, role, password });
+      }
+
+      state.db.users = Array.from(
+        new Map(
+          state.db.users.map((user) => [user.id.toLowerCase(), { ...user, id: user.id.trim() }])
+        ).values()
+      )
+        .map((user) => ({ ...user, name: user.id }))
+        .sort((a, b) => a.id.toLowerCase().localeCompare(b.id.toLowerCase()));
+
+      storage.save(state.db);
+    };
+
+    const deleteUser = (id) => {
+      state.db.users = state.db.users.filter((user) => user.id !== id);
+      storage.save(state.db);
+    };
+
+    const logout = () => {
+      state.session = null;
+      storage.clearSession();
+      state.activeView = "dashboard";
+      renderApp();
+    };
+
+    const renderApp = () => {
+      const root = $("#app");
+      if (!state.session) {
+        root.innerHTML = renderLogin();
+        bindLoginHandlers(root);
+      } else {
+        renderDashboard();
+      }
+    };
+
+    const renderLogin = () => `
+      <div class="welcome">
+        <div class="card" role="form" aria-labelledby="loginTitle">
+          <div>
+            <h1 id="loginTitle">Inventory App</h1>
+            <p class="muted">Sign in using your assigned role to manage inventory records.</p>
+          </div>
+          <div class="form-stack">
+            <label>
+              Email or ID
+              <input id="loginId" type="text" autocomplete="username" placeholder="username" />
+            </label>
+            <label>
+              Password
+              <input id="loginPassword" type="password" autocomplete="current-password" placeholder="••••••" />
+            </label>
+            <button class="primary" id="loginBtn">Sign In</button>
+            <p class="message" id="loginMessage"></p>
+          </div>
+          ${state.storageError ? '<p class="message error">Browser storage is unavailable; changes will not persist.</p>' : ''}
+          <p class="hint">Admin: admin / admin123 — User: user / user123</p>
+        </div>
+      </div>
+    `;
+
+    const renderDashboard = () => {
+      if (!state.session) {
+        renderApp();
+        return;
+      }
+
+      const currentUser = state.db.users.find((user) => user.id === state.session.userId);
+      if (!currentUser) {
+        logout();
+        return;
+      }
+
+      const isAdmin = currentUser.role === "admin";
+      const allowedViews = new Set(["dashboard"]);
+      if (isAdmin) {
+        allowedViews.add("users");
+        allowedViews.add("settings");
+      } else {
+        allowedViews.add("inventory");
+      }
+      if (!allowedViews.has(state.activeView)) {
+        state.activeView = "dashboard";
+      }
+
+      const root = document.createElement("div");
+      const inventorySection = isAdmin ? "" : renderInventoryView(currentUser);
+      const usersSection = isAdmin ? renderUsersView() : "";
+      const settingsSection = isAdmin ? renderSettingsView() : "";
+      root.className = "app-shell";
+      root.innerHTML = `
+        ${renderSidebar(currentUser)}
+        <main class="content">
+          ${renderDashboardView(currentUser)}
+          ${inventorySection}
+          ${usersSection}
+          ${settingsSection}
+        </main>
+      `;
+
+      const host = $("#app");
+      host.innerHTML = "";
+      host.appendChild(root);
+
+      $$('[data-view]').forEach((section) => {
+        section.classList.toggle("active", section.dataset.view === state.activeView);
+      });
+
+      bindDashboardHandlers(document);
+    };
+
+    const renderSidebar = (user) => {
+      const isAdmin = user?.role === "admin";
+      const inventoryNav = isAdmin
+        ? ""
+        : `<button class="nav-link ${state.activeView === "inventory" ? "active" : ""}" data-nav="inventory">Inventory</button>`;
+      const usersNav = isAdmin
+        ? `<button class="nav-link ${state.activeView === "users" ? "active" : ""}" data-nav="users">Users</button>`
+        : "";
+      const settingsNav = isAdmin
+        ? `<button class="nav-link ${state.activeView === "settings" ? "active" : ""}" data-nav="settings">Settings</button>`
+        : "";
+      return `
+        <aside class="sidebar">
+          <div class="brand">
+            <div class="logo" aria-hidden="true">📦</div>
+            <h1>Inventory App</h1>
+            <p class="muted">Signed in as <strong>${user?.name || "Unknown"}</strong></p>
+          </div>
+          <nav class="nav" aria-label="Primary">
+            <button class="nav-link ${state.activeView === "dashboard" ? "active" : ""}" data-nav="dashboard">Overview</button>
+            ${inventoryNav}
+            ${usersNav}
+            ${settingsNav}
+          </nav>
+          <button class="ghost logout" id="logoutBtn">Sign Out</button>
+        </aside>
+      `;
+    };
+
+    const renderDashboardView = (user) => {
+      const totalItems = state.db.items.length;
+      const totalQuantity = state.db.items.reduce((sum, item) => sum + Number(item.quantity || 0), 0);
+      const ownItems = state.db.items.filter((item) => item.createdBy === user?.id).length;
+      return `
+        <section class="view ${state.activeView === "dashboard" ? "active" : ""}" data-view="dashboard">
+          <header class="view-header">
+            <div>
+              <h2>Control Center</h2>
+              <p class="muted">Monitor inventory flow and track contributions across the team.</p>
+              ${state.storageError ? '<p class="message error">Browser storage is unavailable; data may reset after refresh.</p>' : ''}
+            </div>
+          </header>
+          <div class="panel" role="list">
+            <div class="stat" role="listitem">
+              <span class="stat-value">${totalItems}</span>
+              <span class="stat-label">Items Tracked</span>
+            </div>
+            <div class="stat" role="listitem">
+              <span class="stat-value">${totalQuantity}</span>
+              <span class="stat-label">Units Available</span>
+            </div>
+            <div class="stat" role="listitem">
+              <span class="stat-value">${ownItems}</span>
+              <span class="stat-label">Items Added By You</span>
+            </div>
+          </div>
+        </section>
+      `;
+    };
+
+    const renderInventoryView = (user) => {
+      const isAdmin = user?.role === "admin";
+      const editingItem = state.editingItem;
+      const locationMap = new Map();
+      state.db.locations.forEach((value) => {
+        if (typeof value !== "string") return;
+        const trimmed = value.trim();
+        if (!trimmed) return;
+        const key = trimmed.toLowerCase();
+        if (!locationMap.has(key)) {
+          locationMap.set(key, trimmed);
+        }
+      });
+      if (editingItem?.location) {
+        const key = editingItem.location.toLowerCase();
+        if (!locationMap.has(key)) {
+          locationMap.set(key, editingItem.location);
+        }
+      }
+      const locations = Array.from(locationMap.values());
+      const hasLocations = locations.length > 0;
+      const locationOptions = hasLocations
+        ? locations
+            .map((location, index) => {
+              const selected = editingItem
+                ? editingItem.location === location
+                : index === 0;
+              return `<option value="${escapeAttr(location)}" ${selected ? "selected" : ""}>${escapeHTML(location)}</option>`;
+            })
+            .join("")
+        : '<option value="">No locations configured</option>';
+      const itemRows = state.db.items
+        .map((item) => {
+          const imageCount = item.images?.length || 0;
+          const canEdit = isAdmin;
+          const canDelete = true;
+          const deleteLabel = isAdmin ? "Delete" : "Remove";
+          return `
+            <tr data-id="${item.id}">
+              <td>
+                <strong>${item.name}</strong>
+                <div class="muted">${item.sku || "No SKU"}</div>
+              </td>
+              <td>${item.description || "—"}</td>
+              <td>${item.quantity || 0}</td>
+              <td>${item.location || "—"}</td>
+              <td>
+                <ul class="meta-list">
+                  <li><strong>Created:</strong> ${formatDate(item.createdAt)}</li>
+                  <li><strong>By:</strong> ${resolveUserName(item.createdBy)}</li>
+                  <li><strong>Images:</strong> ${imageCount}</li>
+                </ul>
+              </td>
+              <td>
+                <div class="table-actions">
+                  <button class="ghost small" data-action="preview">Preview</button>
+                  ${canEdit ? `<button class="ghost small" data-action="edit">Edit</button>` : ""}
+                  ${canDelete ? `<button class="ghost small danger" data-action="delete">${deleteLabel}</button>` : ""}
+                </div>
+              </td>
+            </tr>
+          `;
+        })
+        .join("");
+
+      return `
+        <section class="view ${state.activeView === "inventory" ? "active" : ""}" data-view="inventory">
+          <header class="view-header">
+            <div>
+              <h2>Inventory</h2>
+              <p class="muted">Maintain stock, add enriched descriptions, and attach unlimited visuals.</p>
+            </div>
+          </header>
+          <div class="panel">
+            <form id="inventoryForm">
+              <input type="hidden" id="itemId" />
+              <div class="form-grid">
+                <label>
+                  Item Name
+                  <input type="text" id="itemName" placeholder="Enter a descriptive item name" required />
+                </label>
+                <label>
+                  SKU
+                  <input type="text" id="itemSku" placeholder="Optional SKU" />
+                </label>
+                <label>
+                  Quantity
+                  <input type="number" id="itemQuantity" placeholder="0" min="0" />
+                </label>
+                <label>
+                  Location
+                  <select id="itemLocation" ${hasLocations ? "" : "disabled"}>
+                    ${locationOptions}
+                  </select>
+                </label>
+                <label class="wide">
+                  Description
+                  <textarea id="itemDescription" placeholder="Provide context, technical details, or handling notes."></textarea>
+                </label>
+                <div class="image-field wide">
+                  <strong>Item Images</strong>
+                  <p class="hint">Attach as many images as needed. This item can be saved without any images.</p>
+                  <div class="image-toolbar">
+                    <label class="import-label secondary">
+                      <span>Upload Images</span>
+                      <input type="file" id="itemImages" accept="image/*" multiple />
+                    </label>
+                    <button type="button" class="ghost small" id="clearImages">Clear Draft Images</button>
+                  </div>
+                  <div class="image-grid" id="draftGallery">
+                    <p class="image-empty">No images attached yet.</p>
+                  </div>
+                </div>
+              </div>
+              <div class="form-actions">
+                <button type="submit" class="primary" id="saveItem">Add Item</button>
+                <button type="button" class="ghost" id="resetItem">Reset</button>
+                <span class="badge" id="draftCount">0 images</span>
+              </div>
+              <p class="message" id="itemMessage"></p>
+              ${hasLocations ? "" : '<p class="message error">No locations configured. Ask an admin to add one in Settings.</p>'}
+            </form>
+          </div>
+          <section class="panel table-panel">
+            <div class="table-scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Item</th>
+                    <th>Description</th>
+                    <th>Qty</th>
+                    <th>Location</th>
+                    <th>Metadata</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${itemRows || `<tr><td colspan="6" class="empty">No inventory items yet.</td></tr>`}
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </section>
+      `;
+    };
+
+    const renderUsersView = () => {
+      const rows = state.db.users
+        .map((user) => `
+          <tr data-id="${user.id}">
+            <td>${user.id}</td>
+            <td><span class="badge">${user.role}</span></td>
+            <td>
+              <div class="table-actions">
+                <button class="ghost small" data-action="edit-user">Edit</button>
+                ${user.id !== "admin" ? `<button class="ghost small danger" data-action="delete-user">Remove</button>` : ""}
+              </div>
+            </td>
+          </tr>
+        `)
+        .join("");
+
+      return `
+        <section class="view ${state.activeView === "users" ? "active" : ""}" data-view="users">
+          <header class="view-header">
+            <div>
+              <h2>User Management</h2>
+              <p class="muted">Create, update, or remove accounts that access the application.</p>
+            </div>
+          </header>
+          <div class="panel">
+            <form id="userForm" autocomplete="off">
+              <div class="form-grid">
+                <label>
+                  Username
+                  <input type="text" id="userIdentifier" placeholder="e.g. warehouse" required />
+                </label>
+                <label>
+                  Role
+                  <select id="userRole" required>
+                    <option value="user" selected>User</option>
+                    <option value="admin">Admin</option>
+                  </select>
+                </label>
+                <label>
+                  Password
+                  <input type="text" id="userPassword" placeholder="Leave blank to keep password" />
+                </label>
+              </div>
+              <p class="hint">Usernames double as the display name across the app.</p>
+              <div class="form-actions">
+                <button type="submit" class="primary" id="saveUser">Save User</button>
+                <button type="button" class="ghost" id="resetUser">Reset</button>
+              </div>
+              <p class="message" id="userMessage"></p>
+            </form>
+          </div>
+          <section class="panel table-panel">
+            <div class="table-scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th>User</th>
+                    <th>Role</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${rows || `<tr><td colspan="3" class="empty">No users registered.</td></tr>`}
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </section>
+      `;
+    };
+
+    const renderSettingsView = () => {
+      const locationItems = state.db.locations.length
+        ? state.db.locations
+            .map(
+              (location) => `
+                <li class="location-entry">
+                  <span>${escapeHTML(location)}</span>
+                  <button type="button" class="ghost small" data-remove-location="${escapeAttr(location)}">Remove</button>
+                </li>
+              `
+            )
+            .join("")
+        : '<li class="muted">No locations configured yet.</li>';
+      return `
+        <section class="view ${state.activeView === "settings" ? "active" : ""}" data-view="settings">
+          <header class="view-header">
+            <div>
+              <h2>Operational Tools</h2>
+              <p class="muted">Format, import, and export your inventory data for backups or migrations.</p>
+            </div>
+          </header>
+          <div class="panel">
+            <form id="settingsForm" class="form-grid">
+              <label class="wide">
+                Sync API URL
+                <input type="url" id="settingsApi" placeholder="https://example.com/api" value="${escapeAttr(state.db.settings?.apiUrl || "")}" />
+              </label>
+              <label>
+                Auto Sync
+                <select id="settingsSync">
+                  <option value="true" ${state.db.settings?.autoSync !== false ? "selected" : ""}>Enabled</option>
+                  <option value="false" ${state.db.settings?.autoSync === false ? "selected" : ""}>Disabled</option>
+                </select>
+              </label>
+              <div class="form-actions">
+                <button type="submit" class="primary small">Save Settings</button>
+              </div>
+            </form>
+            <p class="message" id="settingsMessage"></p>
+          </div>
+          <div class="panel">
+            <h3>Locations</h3>
+            <p class="hint">Admins control the list of selectable storage locations.</p>
+            <form id="locationForm" class="form-grid" autocomplete="off">
+              <label class="wide">
+                New Location
+                <input type="text" id="locationName" placeholder="e.g. Cold Storage" />
+              </label>
+              <div class="form-actions">
+                <button type="submit" class="primary small">Add Location</button>
+              </div>
+            </form>
+            <ul class="location-list" id="locationList">
+              ${locationItems}
+            </ul>
+            <p class="message" id="locationMessage"></p>
+          </div>
+          <div class="panel">
+            <h3>Data Tools</h3>
+            <div class="tool-grid">
+              <button class="secondary" id="exportData">Export Database</button>
+              <button class="secondary" id="formatDatabase">Format Storage</button>
+              <label class="import-label secondary">
+                <span>Import Database</span>
+                <input type="file" id="importDatabase" accept="application/json" />
+              </label>
+            </div>
+            <p class="message" id="dataToolsMessage"></p>
+          </div>
+        </section>
+      `;
+    };
+
+    const bindLoginHandlers = (scope) => {
+      const loginBtn = $("#loginBtn", scope);
+      const message = $("#loginMessage", scope);
+      loginBtn?.addEventListener("click", (event) => {
+        event.preventDefault();
+        const identifier = $("#loginId", scope).value.trim();
+        const password = $("#loginPassword", scope).value.trim();
+
+        if (!identifier || !password) {
+          setMessage(message, "Enter your ID or name and password.", "error");
+          return;
+        }
+
+        const normalizedId = identifier.toLowerCase();
+
+        const user = state.db.users.find((entry) => {
+          if (typeof entry?.password !== "string") {
+            return false;
+          }
+          const matchesId = typeof entry?.id === "string" && entry.id.toLowerCase() === normalizedId;
+          const matchesName = typeof entry?.name === "string" && entry.name.toLowerCase() === normalizedId;
+          const storedPassword = entry.password.trim();
+          return (matchesId || matchesName) && storedPassword === password;
+        });
+
+        if (!user && normalizedId === "admin" && password === "admin123") {
+          const fallbackAdmin = deepClone(DEFAULT_DB.users[0]);
+          state.db.users.unshift(fallbackAdmin);
+          storage.save(state.db);
+          state.session = { userId: fallbackAdmin.id };
+          storage.saveSession(state.session);
+          renderApp();
+          return;
+        }
+
+        if (!user) {
+          setMessage(message, "Invalid credentials. Try again.", "error");
+          return;
+        }
+
+        state.session = { userId: user.id };
+        storage.saveSession(state.session);
+        setMessage(message, "");
+        renderApp();
+      });
+    };
+
+    const bindDashboardHandlers = (scope) => {
+      $$("[data-nav]", scope).forEach((button) => {
+        button.addEventListener("click", () => {
+          setActiveView(button.dataset.nav);
+        });
+      });
+
+      $("#logoutBtn", scope)?.addEventListener("click", logout);
+
+      bindInventoryHandlers(scope);
+      bindUserHandlers(scope);
+      bindSettingsHandlers(scope);
+    };
+
+    const bindInventoryHandlers = (scope) => {
+      const form = $("#inventoryForm", scope);
+      if (!form) {
+        return;
+      }
+      const message = $("#itemMessage", scope);
+      const fileInput = $("#itemImages", scope);
+      const gallery = $("#draftGallery", scope);
+      const draftCount = $("#draftCount", scope);
+      const saveBtn = $("#saveItem", scope);
+      const locationSelect = $("#itemLocation", scope);
+      const currentUserId = state.session?.userId;
+      const currentUser = state.db.users.find((user) => user.id === currentUserId);
+      const isAdmin = currentUser?.role === "admin";
+      const hasLocations = state.db.locations.length > 0;
+
+      saveBtn.textContent = isAdmin ? "Save Item" : "Add Item";
+      if (!hasLocations) {
+        saveBtn.disabled = true;
+        setMessage(
+          message,
+          isAdmin
+            ? "Add at least one location in Settings before creating items."
+            : "No locations available. Ask an admin to configure locations.",
+          "error"
+        );
+      } else {
+        saveBtn.disabled = false;
+      }
+
+      const updateDraftBadge = () => {
+        draftCount.textContent = `${state.inventoryDraftImages.length} images`;
+      };
+
+      const resetForm = () => {
+        form?.reset();
+        $("#itemId", scope).value = "";
+        state.inventoryDraftImages = [];
+        updateDraftBadge();
+        renderDraftImages(gallery);
+        setMessage(message, "Form cleared.");
+        state.editingItem = null;
+        if (locationSelect) {
+          locationSelect.value = state.db.locations[0] || "";
+        }
+        saveBtn.textContent = isAdmin ? "Save Item" : "Add Item";
+      };
+
+      form?.addEventListener("submit", (event) => {
+        event.preventDefault();
+        if (!state.db.locations.length) {
+          setMessage(message, "Locations are not configured yet.", "error");
+          return;
+        }
+        const payload = {
+          id: $("#itemId", scope).value || null,
+          name: $("#itemName", scope).value.trim(),
+          sku: $("#itemSku", scope).value.trim(),
+          quantity: Number($("#itemQuantity", scope).value || 0),
+          location: (locationSelect?.value || "").trim(),
+          description: $("#itemDescription", scope).value.trim(),
+          images: state.inventoryDraftImages
+        };
+
+        if (!payload.name) {
+          setMessage(message, "Item name is required.", "error");
+          return;
+        }
+
+        if (!payload.location) {
+          setMessage(message, "Select a location before saving.", "error");
+          return;
+        }
+
+        if (!isAdmin && payload.id) {
+          setMessage(message, "Users can only add new items.", "error");
+          return;
+        }
+
+        upsertItem(payload);
+        resetForm();
+        setMessage(message, payload.id ? "Item updated." : "Item added successfully.");
+        state.activeView = "inventory";
+        renderDashboard();
+      });
+
+      const resetBtn = $("#resetItem", scope);
+      const clearImagesBtn = $("#clearImages", scope);
+
+      resetBtn?.addEventListener("click", (event) => {
+        event.preventDefault();
+        resetForm();
+      });
+
+      clearImagesBtn?.addEventListener("click", () => {
+        state.inventoryDraftImages = [];
+        updateDraftBadge();
+        renderDraftImages(gallery);
+        setMessage(message, "Draft images cleared.");
+      });
+
+      fileInput?.addEventListener("change", async (event) => {
+        const files = Array.from(event.target.files || []);
+        if (!files.length) return;
+
+        for (const file of files) {
+          const dataUrl = await readFileAsDataURL(file);
+          state.inventoryDraftImages.push({
+            id: randomId(),
+            name: file.name,
+            size: file.size,
+            type: file.type,
+            dataUrl
+          });
+        }
+
+        updateDraftBadge();
+        renderDraftImages(gallery);
+        fileInput.value = "";
+      });
+
+      $$("[data-action]", scope).forEach((button) => {
+        button.addEventListener("click", (event) => {
+          const action = button.dataset.action;
+          const row = button.closest("tr");
+          if (!row) return;
+          const itemId = row.dataset.id;
+          const item = state.db.items.find((entry) => entry.id === itemId);
+          if (!item) return;
+
+          if (action === "preview") {
+            previewItem(item);
+            return;
+          }
+
+          if (action === "edit") {
+            if (!isAdmin) {
+              setMessage(message, "Only admins can edit existing items.", "error");
+              return;
+            }
+            state.editingItem = deepClone(item);
+            populateItemForm(item, scope);
+            saveBtn.textContent = "Update Item";
+            setMessage(message, "Editing item. Attach additional images if needed.");
+            return;
+          }
+
+          if (action === "delete") {
+            const promptText = isAdmin
+              ? "Delete this item and all attached images?"
+              : "Remove this item from inventory?";
+            if (confirm(promptText)) {
+              deleteItem(item.id);
+              setMessage(message, "Item removed.");
+              renderDashboard();
+            }
+          }
+        });
+      });
+
+      const renderDraftImages = (galleryEl) => {
+        if (!galleryEl) return;
+        if (!state.inventoryDraftImages.length) {
+          galleryEl.innerHTML = `<p class="image-empty">No images attached yet.</p>`;
+          return;
+        }
+
+        galleryEl.innerHTML = state.inventoryDraftImages
+          .map((image) => `
+            <figure class="image-card" data-id="${image.id}">
+              <img src="${image.dataUrl}" alt="${image.name}" />
+              <figcaption>${image.name}</figcaption>
+              <small>${formatBytes(image.size)}</small>
+              <button type="button" class="ghost small" data-remove-image="${image.id}">Remove</button>
+            </figure>
+          `)
+          .join("");
+
+        $$('[data-remove-image]', galleryEl).forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const id = btn.dataset.removeImage;
+            state.inventoryDraftImages = state.inventoryDraftImages.filter((img) => img.id !== id);
+            updateDraftBadge();
+            renderDraftImages(galleryEl);
+          });
+        });
+      };
+
+      renderDraftImages(gallery);
+      updateDraftBadge();
+    };
+
+    const populateItemForm = (item, scope) => {
+      $("#itemId", scope).value = item.id;
+      $("#itemName", scope).value = item.name || "";
+      $("#itemSku", scope).value = item.sku || "";
+      $("#itemQuantity", scope).value = item.quantity ?? 0;
+      const locationField = $("#itemLocation", scope);
+      if (locationField) {
+        const currentLocation = item.location || "";
+        const hasOption = Array.from(locationField.options || []).some(
+          (option) => option.value === currentLocation
+        );
+        if (currentLocation && !hasOption) {
+          const option = document.createElement("option");
+          option.value = currentLocation;
+          option.textContent = currentLocation;
+          locationField.appendChild(option);
+        }
+        locationField.value = currentLocation;
+      }
+    $("#itemDescription", scope).value = item.description || "";
+    state.inventoryDraftImages = Array.isArray(item.images) ? deepClone(item.images) : [];
+      const gallery = $("#draftGallery", scope);
+      const badge = $("#draftCount", scope);
+      badge.textContent = `${state.inventoryDraftImages.length} images`;
+      updateImageGallery(gallery);
+    };
+
+    const updateImageGallery = (galleryEl) => {
+      if (!galleryEl) return;
+      if (!state.inventoryDraftImages.length) {
+        galleryEl.innerHTML = `<p class="image-empty">No images attached yet.</p>`;
+        return;
+      }
+
+      galleryEl.innerHTML = state.inventoryDraftImages
+        .map((image) => `
+          <figure class="image-card" data-id="${image.id}">
+            <img src="${image.dataUrl}" alt="${image.name}" />
+            <figcaption>${image.name}</figcaption>
+            <small>${formatBytes(image.size)}</small>
+            <button type="button" class="ghost small" data-remove-image="${image.id}">Remove</button>
+          </figure>
+        `)
+        .join("");
+
+      $$('[data-remove-image]', galleryEl).forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const id = btn.dataset.removeImage;
+          state.inventoryDraftImages = state.inventoryDraftImages.filter((img) => img.id !== id);
+          updateImageGallery(galleryEl);
+          const badge = $("#draftCount");
+          if (badge) badge.textContent = `${state.inventoryDraftImages.length} images`;
+        });
+      });
+    };
+
+    const previewItem = (item) => {
+      const modal = document.createElement("dialog");
+      modal.className = "panel";
+      modal.style.maxWidth = "640px";
+      modal.style.border = "none";
+      modal.style.borderRadius = "18px";
+      modal.innerHTML = `
+        <article>
+          <header class="view-header">
+            <div>
+              <h2>${item.name}</h2>
+              <p class="muted">${item.sku || "No SKU"}</p>
+            </div>
+            <button class="ghost" data-close>Close</button>
+          </header>
+          <p>${item.description || "No description"}</p>
+          <ul class="meta-list">
+            <li><strong>Quantity:</strong> ${item.quantity || 0}</li>
+            <li><strong>Location:</strong> ${item.location || "—"}</li>
+            <li><strong>Created:</strong> ${formatDate(item.createdAt)}</li>
+            <li><strong>Created By:</strong> ${resolveUserName(item.createdBy)}</li>
+          </ul>
+          <div class="image-grid" style="margin-top: 1.5rem;">
+            ${item.images?.length
+              ? item.images
+                  .map(
+                    (image) => `
+                      <figure class="image-card">
+                        <img src="${image.dataUrl}" alt="${image.name}" />
+                        <figcaption>${image.name}</figcaption>
+                        <small>${formatBytes(image.size)}</small>
+                      </figure>
+                    `
+                  )
+                  .join("")
+              : `<p class="image-empty">No images for this item.</p>`}
+          </div>
+        </article>
+      `;
+      document.body.appendChild(modal);
+      modal.showModal();
+      $("[data-close]", modal)?.addEventListener("click", () => {
+        modal.close();
+        modal.remove();
+      });
+      modal.addEventListener("cancel", () => {
+        modal.remove();
+      });
+    };
+
+    const bindUserHandlers = (scope) => {
+      const userForm = $("#userForm", scope);
+      if (!userForm) return;
+      const message = $("#userMessage", scope);
+
+      userForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const username = $("#userIdentifier", scope).value.trim();
+        const payload = {
+          id: username,
+          role: $("#userRole", scope).value,
+          password: $("#userPassword", scope).value.trim()
+        };
+
+        if (!payload.id) {
+          setMessage(message, "Username is required.", "error");
+          return;
+        }
+
+        upsertUser(payload);
+        userForm.reset();
+        $("#userRole", scope).value = "user";
+        setMessage(message, "User saved successfully.");
+        renderDashboard();
+      });
+
+      $("#resetUser", scope)?.addEventListener("click", () => {
+        userForm.reset();
+        $("#userRole", scope).value = "user";
+        setMessage(message, "Form cleared.");
+      });
+
+      $$("[data-action=edit-user]", scope).forEach((button) => {
+        button.addEventListener("click", () => {
+          const row = button.closest("tr");
+          if (!row) return;
+          const user = state.db.users.find((entry) => entry.id === row.dataset.id);
+          if (!user) return;
+          $("#userIdentifier", scope).value = user.id;
+          $("#userRole", scope).value = user.role;
+          $("#userPassword", scope).value = "";
+          setMessage(message, "Editing user. Update details and save.");
+        });
+      });
+
+      $$("[data-action=delete-user]", scope).forEach((button) => {
+        button.addEventListener("click", () => {
+          const row = button.closest("tr");
+          if (!row) return;
+          if (confirm("Remove this user?")) {
+            deleteUser(row.dataset.id);
+            renderDashboard();
+          }
+        });
+      });
+    };
+
+    const bindSettingsHandlers = (scope) => {
+      const settingsForm = $("#settingsForm", scope);
+      const settingsMessage = $("#settingsMessage", scope);
+      const exportBtn = $("#exportData", scope);
+      const formatBtn = $("#formatDatabase", scope);
+      const importInput = $("#importDatabase", scope);
+      const dataMessage = $("#dataToolsMessage", scope);
+      const locationForm = $("#locationForm", scope);
+      const locationMessage = $("#locationMessage", scope);
+
+      settingsForm?.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const apiUrl = $("#settingsApi", scope)?.value.trim() || "";
+        const autoSync = $("#settingsSync", scope)?.value !== "false";
+        state.db.settings.apiUrl = apiUrl;
+        state.db.settings.autoSync = autoSync;
+        storage.save(state.db);
+        setMessage(
+          settingsMessage,
+          autoSync ? "Settings saved. Sync enabled." : "Settings saved. Sync disabled."
+        );
+      });
+
+      exportBtn?.addEventListener("click", () => {
+        try {
+          const payload = JSON.stringify(state.db, null, 2);
+          const blob = new Blob([payload], { type: "application/json" });
+          const url = URL.createObjectURL(blob);
+          const anchor = document.createElement("a");
+          anchor.href = url;
+          anchor.download = `inventory-backup-${Date.now()}.json`;
+          document.body.appendChild(anchor);
+          anchor.click();
+          document.body.removeChild(anchor);
+          URL.revokeObjectURL(url);
+        } catch (error) {
+          console.error("Export failed", error);
+          setMessage(dataMessage, "Failed to export database.", "error");
+          return;
+        }
+        setMessage(dataMessage, "Database exported.");
+      });
+
+      formatBtn?.addEventListener("click", () => {
+        if (!confirm("Reset database to defaults? This will remove all current data.")) {
+          return;
+        }
+  state.db = deepClone(DEFAULT_DB);
+        storage.save(state.db);
+        state.activeView = "settings";
+        renderDashboard();
+        const refreshedMessage = $("#dataToolsMessage");
+        setMessage(refreshedMessage, "Database formatted.");
+      });
+
+      importInput?.addEventListener("change", async (event) => {
+        const file = event.target.files?.[0];
+        if (!file) return;
+        try {
+          const text = await file.text();
+          const imported = JSON.parse(text);
+          state.db = normalizeDb(imported);
+          storage.save(state.db);
+          state.activeView = "settings";
+          renderDashboard();
+          const refreshedMessage = $("#dataToolsMessage");
+          setMessage(refreshedMessage, "Database imported successfully.");
+        } catch (err) {
+          console.error("Import failed", err);
+          const refreshedMessage = $("#dataToolsMessage");
+          setMessage(refreshedMessage, "Failed to import database.", "error");
+        } finally {
+          importInput.value = "";
+        }
+      });
+
+      locationForm?.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const input = $("#locationName", scope);
+        if (!input) {
+          return;
+        }
+        const value = input.value.trim();
+        if (!value) {
+          setMessage(locationMessage, "Location name is required.", "error");
+          return;
+        }
+        const exists = state.db.locations.some(
+          (location) => location.toLowerCase() === value.toLowerCase()
+        );
+        if (exists) {
+          setMessage(locationMessage, "Location already exists.", "error");
+          return;
+        }
+        state.db.locations.push(value);
+        state.db.locations = Array.from(
+          new Map(
+            state.db.locations.map((entry) => {
+              const trimmed = typeof entry === "string" ? entry.trim() : "";
+              return [trimmed.toLowerCase(), trimmed];
+            })
+          ).values()
+        ).filter(Boolean);
+        state.db.locations.sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
+        storage.save(state.db);
+        state.activeView = "settings";
+        renderDashboard();
+        const refreshedMessage = $("#locationMessage");
+        setMessage(refreshedMessage, "Location added.");
+        const refreshedInput = $("#locationName");
+        if (refreshedInput) {
+          refreshedInput.focus();
+        }
+      });
+
+      $$('[data-remove-location]', scope).forEach((button) => {
+        button.addEventListener("click", () => {
+          const target = button.dataset.removeLocation;
+          if (!target) {
+            return;
+          }
+          const inUse = state.db.items.some(
+            (item) => (item.location || "").toLowerCase() === target.toLowerCase()
+          );
+          if (inUse) {
+            setMessage(locationMessage, "Cannot remove a location that is in use.", "error");
+            return;
+          }
+          state.db.locations = state.db.locations.filter(
+            (location) => location.toLowerCase() !== target.toLowerCase()
+          );
+          state.db.locations.sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
+          storage.save(state.db);
+          state.activeView = "settings";
+          renderDashboard();
+          const refreshedMessage = $("#locationMessage");
+          setMessage(refreshedMessage, "Location removed.");
+        });
+      });
+    };
+
+    const readFileAsDataURL = (file) => {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = (error) => reject(error);
+        reader.readAsDataURL(file);
+      });
+    };
+
+    const formatDate = (value) => {
+      if (!value) return "—";
+      try {
+        return new Intl.DateTimeFormat(undefined, {
+          dateStyle: "medium",
+          timeStyle: "short"
+        }).format(new Date(value));
+      } catch (err) {
+        return value;
+      }
+    };
+
+    const formatBytes = (bytes) => {
+      if (!Number.isFinite(bytes) || bytes <= 0) return "0 B";
+      const units = ["B", "KB", "MB", "GB"];
+      const exponent = Math.min(Math.floor(Math.log(bytes) / Math.log(1024)), units.length - 1);
+      const value = bytes / Math.pow(1024, exponent);
+      return `${value.toFixed(1)} ${units[exponent]}`;
+    };
+
+    const escapeHTML = (value) => {
+      return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    };
+
+    const escapeAttr = (value) => escapeHTML(value);
+
+    const resolveUserName = (id) => {
+      if (!id) return "—";
+      return state.db.users.find((user) => user.id === id)?.id || id;
+    };
+
+    initialize();
+  </script>
+</body>
+</html>
